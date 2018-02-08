@@ -14,6 +14,30 @@ function creElT(type, cls, apnd, inHL, id){
 
 let tetrisBoard = {
     tileArr : [],
+    pieces: [],
+    makePieces: function(piece){
+        let newOb = {}
+        for(let h = 0; h < piece.length; h++){
+            let newPiece = [];
+            for(let i = 0; i < 16; i++){
+                let sameNum = false;
+                for(let j = 0; j < piece[h].length; j++){
+                    console.log('sap')
+                    if(piece[h][j] == i){sameNum = true}
+                }
+                if(sameNum){newPiece.push(1)}
+                else{newPiece.push(0)}
+            }
+            if(h == 0){newOb.n = newPiece};
+            if(h == 1){newOb.e = newPiece};
+            if(h == 2){newOb.s = newPiece};
+            if(h == 3){newOb.w = newPiece};
+        }
+        this.pieces.push(newOb);
+    },
+    makePiecesBlueprint: function(){
+        this.makePieces([[2,6,10,14], [8,9,10,11], [1,5,9,13], [4,5,6,7]]);
+    },
     tileInit: function(){
         let xRun = 0;
         let yRun = 0;
@@ -47,6 +71,7 @@ let tetrisBoard = {
 (function initApp(){
     creElT('div', 'app', document.body, '', 'app');
     creElT('div', 'map', document.getElementById('app'));
+    tetrisBoard.makePiecesBlueprint();
     tetrisBoard.tileInit();
     tetrisBoard.drawMap(tetrisBoard.tileArr);
     setTimeout(function(){
