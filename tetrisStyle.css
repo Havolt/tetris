@@ -1,1 +1,30 @@
 
+.map{
+    border: 1px solid rgb(83, 83, 83);
+    width: 420px;
+    height: 756px;
+    margin: 0 auto;
+}
+
+.tile{
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(175, 175, 175, 0.4);
+    float: left;
+    
+}
+
+.redTile{background: red;}
+.blueTile{background: blue;}
+.greenTile{background: green;}
+.yellowTile{background: yellow;}
+.purpleTile{background: indigo;}
+.orangeTile{background: orange;}
+.orangeTile{background: violet; }
+
+
+
+
+.firstXTile{
+    clear:both;
+}
