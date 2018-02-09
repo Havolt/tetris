@@ -36,7 +36,20 @@ let tetrisBoard = {
         this.pieces.push(newOb);
     },
     makePiecesBlueprint: function(){
+        //Line
         this.makePieces([[2,6,10,14], [8,9,10,11], [1,5,9,13], [4,5,6,7]]);
+        //Square
+        this.makePieces([[5,6,9,10], [5,6,9,10], [5,6,9,10], [5,6,9,10]]);
+        //L-Shape
+        this.makePieces([[1,5,9,10], [2,4,5,6], [0,1,5,9], [4,5,6,8]]);
+        //J-Shape
+        this.makePieces([[1,5,9,10], [0,4,5,6], [1,2,5,9], [4,5,6,10]]);
+        //Tee
+        this.makePieces([[4,5,6,9], [1,4,5,9], [1,5,6,9], [1,4,5,6]]);
+        //Z-Shape
+        this.makePieces([[2,5,6,9], [4,5,9,10], [1,4,5,8], [0,1,5,6]]);
+        //S-Shape
+        this.makePieces([[1,5,6,10], [5,6,8,9], [0,4,5,9], [1,2,4,5]]);
     },
     tileInit: function(){
         let xRun = 0;
