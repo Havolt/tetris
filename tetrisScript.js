@@ -97,6 +97,15 @@ let tetrisBoard = {
         if(e.keyCode == 37 && tetrisBoard.currPiece.userLoc > 0){tetrisBoard.currPiece.location--; tetrisBoard.currPiece.userLoc--};
         if(e.keyCode == 39 && tetrisBoard.currPiece.userLoc < 8){tetrisBoard.currPiece.location++; tetrisBoard.currPiece.userLoc++};
     },
+    gravityMove: {runner : 0, gravFunc: function(){
+        this.runner++;
+        if(this.runner == 10){
+            if(tetrisBoard.currPiece.location < 146){
+                tetrisBoard.currPiece.location += 10;
+            }
+            this.runner = 0;
+        }
+    }},
     //Creates tile positions
     tileInit: function(){
         let xRun = 0;
@@ -123,6 +132,7 @@ let tetrisBoard = {
             creElT('div', arr[i].classes, document.getElementsByClassName('map')[0]);
         }
     },
+    //Clears previous position of piece
     clearMap: function(){
         for(let i = 0; i < this.tileArr.length; i++){
             if(this.tileArr[i].permanent == false){
@@ -133,12 +143,14 @@ let tetrisBoard = {
             };
         }
     },
+    //Recursive function which calls itself every 50ms
     intervalCall: function(arr){
+        this.gravityMove.gravFunc();
         this.clearMap();
         document.getElementsByClassName('map')[0].innerHTML = '';
         this.movePiece();
         this.drawMap(arr);
-        setTimeout(function(){tetrisBoard.intervalCall(tetrisBoard.tileArr);}, 400);
+        setTimeout(function(){tetrisBoard.intervalCall(tetrisBoard.tileArr);}, 50);
     }
 };
 
