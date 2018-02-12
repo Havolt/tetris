@@ -73,7 +73,21 @@ let tetrisBoard = {
     },
     movePiece: function(){
         //console.log('boop')
-
+        for(let i = 0; i < this.tileArr.length; i++){
+            if(i == this.currPiece.location){
+                let posRunSmall = 0;
+                let posRun = 0;
+                for(let j = 0; j < this.currPiece.map.length; j++){
+                    if(this.currPiece.map[j] == 1){
+                        this.tileArr[i+posRun+j].empty = false;
+                        this.tileArr[i+posRun+j].classes.push(this.currPiece.color +'Tile');
+                    }
+                    posRunSmall++;
+                    if(posRunSmall == '4'){posRun += 6; posRunSmall = 0;}
+                }
+                
+            };
+        }
 
     },
     //Creates tile positions

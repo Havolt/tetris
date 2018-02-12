@@ -14,13 +14,13 @@
     
 }
 
-.redTile{background: red;}
-.blueTile{background: blue;}
-.greenTile{background: green;}
-.yellowTile{background: yellow;}
-.purpleTile{background: indigo;}
 .orangeTile{background: orange;}
-.orangeTile{background: violet; }
+.yellowTile{background: yellow;}
+.redTile{background: red;}
+.cyanTile{background: cyan;}
+.greenTile{background: green;}
+.amberTile{background: #FFC000;}
+.magentaTile{background: magenta; }
 
 
 
