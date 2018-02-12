@@ -35,37 +35,46 @@ let tetrisBoard = {
             if(h == 3){newOb.w = newPiece};
         }
         newOb.name = piece[4];
+        newOb.color = piece[5];
         this.pieces.push(newOb);
     },
     //Makes pieces basic information
     makePiecesBlueprint: function(){
         //Line
-        this.makePieces([[2,6,10,14], [8,9,10,11], [1,5,9,13], [4,5,6,7], 'Line']);
+        this.makePieces([[2,6,10,14], [8,9,10,11], [1,5,9,13], [4,5,6,7], 'Line', 'orange']);
         //Square
-        this.makePieces([[5,6,9,10], [5,6,9,10], [5,6,9,10], [5,6,9,10], 'Square']);
+        this.makePieces([[5,6,9,10], [5,6,9,10], [5,6,9,10], [5,6,9,10], 'Square', 'yellow']);
         //L-Shape
-        this.makePieces([[1,5,9,10], [2,4,5,6], [0,1,5,9], [4,5,6,8], 'L-Shape']);
+        this.makePieces([[1,5,9,10], [2,4,5,6], [0,1,5,9], [4,5,6,8], 'L-Shape', 'red']);
         //J-Shape
-        this.makePieces([[1,5,9,10], [0,4,5,6], [1,2,5,9], [4,5,6,10], 'J-Shape']);
+        this.makePieces([[1,5,9,10], [0,4,5,6], [1,2,5,9], [4,5,6,10], 'J-Shape', 'cyan']);
         //Tee
-        this.makePieces([[4,5,6,9], [1,4,5,9], [1,5,6,9], [1,4,5,6], 'Tee']);
+        this.makePieces([[4,5,6,9], [1,4,5,9], [1,5,6,9], [1,4,5,6], 'Tee', 'green']);
         //Z-Shape
-        this.makePieces([[2,5,6,9], [4,5,9,10], [1,4,5,8], [0,1,5,6], 'Z-Shape']);
+        this.makePieces([[2,5,6,9], [4,5,9,10], [1,4,5,8], [0,1,5,6], 'Z-Shape', 'amber']);
         //S-Shape
-        this.makePieces([[1,5,6,10], [5,6,8,9], [0,4,5,9], [1,2,4,5], 'S-Shape']);
+        this.makePieces([[1,5,6,10], [5,6,8,9], [0,4,5,9], [1,2,4,5], 'S-Shape', 'magenta'] );
     },
     //Picks current Piece
     selectPiece: function(arr){
         
         let spRand = Math.floor(Math.random()*arr.length);
         let spRand2 = Math.floor(Math.random()*4);
+        let spRand3 = Math.floor(Math.random()*7);
         if(spRand2 == 0){this.currPiece.map = arr[spRand].n, this.currPiece.direction = 'n'}
         if(spRand2 == 1){this.currPiece.map = arr[spRand].e, this.currPiece.direction = 'e'}
         if(spRand2 == 2){this.currPiece.map = arr[spRand].s, this.currPiece.direction = 's'}
         if(spRand2 == 3){this.currPiece.map = arr[spRand].w, this.currPiece.direction = 'w'}
+        if(spRand3)
         this.currPiece.name = arr[spRand].name;
-        
-        console.log(this.currPiece)
+        this.currPiece.color = arr[spRand].color;
+        this.currPiece.location = 3;
+        console.log(arr[spRand])
+    },
+    movePiece: function(){
+        //console.log('boop')
+
+
     },
     //Creates tile positions
     tileInit: function(){
@@ -94,6 +103,7 @@ let tetrisBoard = {
     },
     intervalCall: function(arr){
         document.getElementsByClassName('map')[0].innerHTML = '';
+        this.movePiece();
         this.drawMap(arr);
         setTimeout(function(){tetrisBoard.intervalCall(tetrisBoard.tileArr);}, 400);
     }
