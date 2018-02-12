@@ -65,12 +65,13 @@ let tetrisBoard = {
         if(spRand2 == 1){this.currPiece.map = arr[spRand].e, this.currPiece.direction = 'e'}
         if(spRand2 == 2){this.currPiece.map = arr[spRand].s, this.currPiece.direction = 's'}
         if(spRand2 == 3){this.currPiece.map = arr[spRand].w, this.currPiece.direction = 'w'}
-        if(spRand3)
+        this.currPiece.userLoc = 3;
         this.currPiece.name = arr[spRand].name;
         this.currPiece.color = arr[spRand].color;
         this.currPiece.location = 3;
         console.log(arr[spRand])
     },
+    //Places piece on map
     movePiece: function(){
         //console.log('boop')
         for(let i = 0; i < this.tileArr.length; i++){
@@ -90,6 +91,12 @@ let tetrisBoard = {
         }
 
     },
+    //Gives user ability to move piece
+    userMovePiece: function(e){
+        console.log(e)
+        if(e.keyCode == 37 && tetrisBoard.currPiece.userLoc > 0){tetrisBoard.currPiece.location--; tetrisBoard.currPiece.userLoc--};
+        if(e.keyCode == 39 && tetrisBoard.currPiece.userLoc < 8){tetrisBoard.currPiece.location++; tetrisBoard.currPiece.userLoc++};
+    },
     //Creates tile positions
     tileInit: function(){
         let xRun = 0;
@@ -105,6 +112,7 @@ let tetrisBoard = {
             
             newTileObj.empty = true;
             newTileObj.color = '';
+            newTileObj.permanent = false;
             this.tileArr.push(newTileObj);
         }
         
@@ -115,13 +123,26 @@ let tetrisBoard = {
             creElT('div', arr[i].classes, document.getElementsByClassName('map')[0]);
         }
     },
+    clearMap: function(){
+        for(let i = 0; i < this.tileArr.length; i++){
+            if(this.tileArr[i].permanent == false){
+                if(this.tileArr[i].empty == false){
+                    this.tileArr[i].classes.pop();
+                    this.tileArr[i].empty = true;
+                }
+            };
+        }
+    },
     intervalCall: function(arr){
+        this.clearMap();
         document.getElementsByClassName('map')[0].innerHTML = '';
         this.movePiece();
         this.drawMap(arr);
         setTimeout(function(){tetrisBoard.intervalCall(tetrisBoard.tileArr);}, 400);
     }
 };
+
+
 
 //Initialize Application
 (function initApp(){
@@ -130,7 +151,8 @@ let tetrisBoard = {
     tetrisBoard.makePiecesBlueprint();
     tetrisBoard.tileInit();
     tetrisBoard.drawMap(tetrisBoard.tileArr);
-    tetrisBoard.selectPiece(tetrisBoard.pieces)
+    tetrisBoard.selectPiece(tetrisBoard.pieces);
+    document.addEventListener('keydown', function(){tetrisBoard.userMovePiece(event)})
     setTimeout(function(){
         tetrisBoard.intervalCall(tetrisBoard.tileArr);
     }, 400)
