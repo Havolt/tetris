@@ -16,7 +16,7 @@ function creElT(type, cls, apnd, inHL, id){
 let tetrisBoard = {
     tileArr : [],
     pieces: [],
-    currPiece: {name : '', map: '', direction: ''},
+    currPiece: {name : '', map: '', direction: '', truePos : []},
     makePieces: function(piece){
         let newOb = {}
         for(let h = 0; h < piece.length-1; h++){
@@ -94,27 +94,14 @@ let tetrisBoard = {
     //Gives user ability to move piece
     userMovePiece: function(e){
 
-        let pieceLocArr = []
         let allowMoveRight = true;
         let allowMoveLeft = true;
-        for(let i = 0; i < tetrisBoard.currPiece.map.length; i++){
-            if(tetrisBoard.currPiece.map[i]){
-                let locMultiplier = Math.floor(((i+1) / 4)) * 6;
-                let currLoc = i;
-                currLoc += tetrisBoard.currPiece.location;
-                currLoc += locMultiplier;
-                pieceLocArr.push(currLoc);
-            }
-        }
-        for(let i = 0; i < pieceLocArr.length; i++){
-            let stringOfNum = pieceLocArr[i].toString().split('').pop();
+        for(let i = 0; i < tetrisBoard.currPiece.truePos.length; i++){
+            let stringOfNum = tetrisBoard.currPiece.truePos[i].toString().split('').pop();
             if(stringOfNum == 9){allowMoveRight = false}
             if(stringOfNum == 0){allowMoveLeft = false}
-            console.log(stringOfNum);
         }
-        
         if(e.keyCode == 37 && allowMoveLeft){
-            
             tetrisBoard.currPiece.location--; 
             tetrisBoard.currPiece.userLoc--
         };
@@ -124,24 +111,38 @@ let tetrisBoard = {
         };
         
     },
+    getTruePositions: function(){
+        tetrisBoard.currPiece.truePos = [];
+        for(let i = 0; i < tetrisBoard.currPiece.map.length; i++){
+            if(tetrisBoard.currPiece.map[i]){
+                let locMultiplier = Math.floor(((i+1) / 4)) * 6;
+                let currLoc = i;
+                currLoc += tetrisBoard.currPiece.location;
+                currLoc += locMultiplier;
+                tetrisBoard.currPiece.truePos.push(currLoc);
+            }
+        }
+    },
+    //Fixes pieces into place
+    fixPiece: function(pce){
+        for(let i = 0; i < pce.length; i++){
+            tetrisBoard.tileArr[pce[i]].permanent = true;
+            tetrisBoard.tileArr[pce[i]].empty = false;
+            tetrisBoard.tileArr[pce[i]].color = tetrisBoard.currPiece.color;
+            console.log(tetrisBoard.tileArr[pce[i]].color)
+            tetrisBoard.selectPiece(tetrisBoard.pieces);
+        }
+    },
+    //Enacts gravity on pieces
     gravityMove: {runner : 0, gravFunc: function(){
         this.runner++;
         if(this.runner == 10){
-            let pieceLocArr = []
             let allowFall = true;
-            for(let i = 0; i < tetrisBoard.currPiece.map.length; i++){
-                if(tetrisBoard.currPiece.map[i]){
-                    let locMultiplier = Math.floor(((i+1) / 4)) * 6;
-                    let currLoc = i;
-                    currLoc += tetrisBoard.currPiece.location;
-                    currLoc += locMultiplier;
-                    pieceLocArr.push(currLoc);
-                }
-            }
-            for(let i = 0; i < pieceLocArr.length; i++){
-                if(pieceLocArr[i] > 169){allowFall = false}
+            for(let i = 0; i < tetrisBoard.currPiece.truePos.length; i++){
+                if(tetrisBoard.currPiece.truePos[i] > 169){allowFall = false}
             }
             if(allowFall){tetrisBoard.currPiece.location += 10}
+            else if(!allowFall){tetrisBoard.fixPiece(tetrisBoard.currPiece.truePos)}
             this.runner = 0;
         }
     }},
@@ -184,6 +185,7 @@ let tetrisBoard = {
     },
     //Recursive function which calls itself every 50ms
     intervalCall: function(arr){
+        this.getTruePositions();
         this.gravityMove.gravFunc();
         this.clearMap();
         document.getElementsByClassName('map')[0].innerHTML = '';
