@@ -15,6 +15,7 @@ function creElT(type, cls, apnd, inHL, id){
 //Object holds all data
 let tetrisBoard = {
     moveTimer : true,
+    rotateTimer: true,
     tileArr : [],
     pieces: [],
     currPiece: {name : '', map: '', direction: '', truePos : []},
@@ -57,20 +58,27 @@ let tetrisBoard = {
         this.makePieces([[1,5,6,10], [5,6,8,9], [0,4,5,9], [1,2,4,5], 'S-Shape', 'magenta'] );
     },
     //Picks current Piece
-    selectPiece: function(arr){
+    selectPiece: function(arr, chosenPiece, dir){
         
-        let spRand = Math.floor(Math.random()*arr.length);
-        let spRand2 = Math.floor(Math.random()*4);
-        let spRand3 = Math.floor(Math.random()*7);
-        if(spRand2 == 0){this.currPiece.map = arr[spRand].n, this.currPiece.direction = 'n'}
-        if(spRand2 == 1){this.currPiece.map = arr[spRand].e, this.currPiece.direction = 'e'}
-        if(spRand2 == 2){this.currPiece.map = arr[spRand].s, this.currPiece.direction = 's'}
-        if(spRand2 == 3){this.currPiece.map = arr[spRand].w, this.currPiece.direction = 'w'}
-        this.currPiece.userLoc = 3;
-        this.currPiece.name = arr[spRand].name;
-        this.currPiece.color = arr[spRand].color;
-        this.currPiece.location = 3;
-        console.log(arr[spRand])
+        if(arr.length > 0){
+            let spRand = Math.floor(Math.random()*arr.length);
+            let spRand2 = Math.floor(Math.random()*4);
+            let spRand3 = Math.floor(Math.random()*7);
+            if(spRand2 == 0){this.currPiece.map = arr[spRand].n, this.currPiece.direction = 'n'}
+            if(spRand2 == 1){this.currPiece.map = arr[spRand].e, this.currPiece.direction = 'e'}
+            if(spRand2 == 2){this.currPiece.map = arr[spRand].s, this.currPiece.direction = 's'}
+            if(spRand2 == 3){this.currPiece.map = arr[spRand].w, this.currPiece.direction = 'w'}
+            this.currPiece.userLoc = 3;
+            this.currPiece.name = arr[spRand].name;
+            this.currPiece.color = arr[spRand].color;
+            this.currPiece.location = 3;
+            console.log(arr[spRand])
+        }
+        else{
+            console.log(dir)
+            this.currPiece.map = chosenPiece[dir];
+            this.currPiece.direction = dir;
+        }
     },
     //Places piece on map
     movePiece: function(){
@@ -91,6 +99,41 @@ let tetrisBoard = {
             };
         }
 
+    },
+    //Guides correct event listeners to right functions
+    eventListenerGate: function(e){
+        if(e.keyCode == 90 || e.keyCode == 67){
+            this.userRotatePiece(e);
+        }
+        if(e.keyCode == 37 || e.keyCode == 39){
+            this.userMovePiece(e);
+        }
+    },
+    //Gives user ability to rotate piece
+    userRotatePiece: function(e){
+        console.log(this.currPiece);
+        //Checkes direction of currPiece and assigns numeric value
+        let direc = 0;
+        if(this.currPiece.direction == 'e'){direc = 1}
+        else if(this.currPiece.direction == 's'){direc = 2}
+        else if(this.currPiece.direction == 'w'){direc = 3}
+        //Changes value accoring to keypress
+        if(e.keyCode == 90){direc--};
+        if(e.keyCode == 67){direc++};
+        //Changes value to proper number
+        if(direc == -1){direc = 3}
+        if(direc == 4){direc = 0}
+        //Change piece back to direction
+        if(direc == 0){direc = 'n'}
+        else if(direc == 1){direc = 'e'}
+        else if(direc == 2){direc = 's'}
+        else if(direc == 3){direc = 'w'}
+
+        for(let i = 0; i < this.pieces.length; i++){
+            if(this.pieces[i].name == this.currPiece.name){
+                this.selectPiece([], this.pieces[i], direc  )
+            }
+        }
     },
     //Gives user ability to move piece
     userMovePiece: function(e){
@@ -138,7 +181,6 @@ let tetrisBoard = {
             tetrisBoard.tileArr[pce[i]].permanent = true;
             tetrisBoard.tileArr[pce[i]].empty = false;
             tetrisBoard.tileArr[pce[i]].color = tetrisBoard.currPiece.color;
-            console.log(tetrisBoard.tileArr[pce[i]].color)
             tetrisBoard.selectPiece(tetrisBoard.pieces);
         }
     },
@@ -220,9 +262,7 @@ let tetrisBoard = {
     tetrisBoard.drawMap(tetrisBoard.tileArr);
     tetrisBoard.selectPiece(tetrisBoard.pieces);
     document.addEventListener('keydown', function(){
-        if(tetrisBoard.moveTimer){
-            tetrisBoard.userMovePiece(event)
-        }
+        if(tetrisBoard.moveTimer){tetrisBoard.eventListenerGate(event)}
     })
     setTimeout(function(){
         tetrisBoard.intervalCall(tetrisBoard.tileArr);
