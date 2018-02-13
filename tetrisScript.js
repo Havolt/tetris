@@ -93,29 +93,40 @@ let tetrisBoard = {
     },
     //Gives user ability to move piece
     userMovePiece: function(e){
-        console.log(e)
 
+        let pieceLocArr = []
+        let allowMoveRight = true;
+        let allowMoveLeft = true;
         for(let i = 0; i < tetrisBoard.currPiece.map.length; i++){
             if(tetrisBoard.currPiece.map[i]){
                 let locMultiplier = Math.floor(((i+1) / 4)) * 6;
                 let currLoc = i;
                 currLoc += tetrisBoard.currPiece.location;
                 currLoc += locMultiplier;
-                console.log(currLoc);
+                pieceLocArr.push(currLoc);
             }
         }
+        for(let i = 0; i < pieceLocArr.length; i++){
+            let stringOfNum = pieceLocArr[i].toString().split('').pop();
+            if(stringOfNum == 9){allowMoveRight = false}
+            if(stringOfNum == 0){allowMoveLeft = false}
+            console.log(stringOfNum);
+        }
+        
 
-        /*
-        if(e.keyCode == 37 && tetrisBoard.currPiece.userLoc > 0){
+        
+
+        
+        if(e.keyCode == 37 && allowMoveLeft){
             
             tetrisBoard.currPiece.location--; 
             tetrisBoard.currPiece.userLoc--
         };
-        if(e.keyCode == 39 && tetrisBoard.currPiece.userLoc < 8){
+        if(e.keyCode == 39 && allowMoveRight){
             tetrisBoard.currPiece.location++; 
             tetrisBoard.currPiece.userLoc++
         };
-        */
+        
     },
     gravityMove: {runner : 0, gravFunc: function(){
         this.runner++;
