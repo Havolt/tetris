@@ -113,10 +113,6 @@ let tetrisBoard = {
             console.log(stringOfNum);
         }
         
-
-        
-
-        
         if(e.keyCode == 37 && allowMoveLeft){
             
             tetrisBoard.currPiece.location--; 
@@ -131,9 +127,21 @@ let tetrisBoard = {
     gravityMove: {runner : 0, gravFunc: function(){
         this.runner++;
         if(this.runner == 10){
-            if(tetrisBoard.currPiece.location <= 149){
-                tetrisBoard.currPiece.location += 10;
+            let pieceLocArr = []
+            let allowFall = true;
+            for(let i = 0; i < tetrisBoard.currPiece.map.length; i++){
+                if(tetrisBoard.currPiece.map[i]){
+                    let locMultiplier = Math.floor(((i+1) / 4)) * 6;
+                    let currLoc = i;
+                    currLoc += tetrisBoard.currPiece.location;
+                    currLoc += locMultiplier;
+                    pieceLocArr.push(currLoc);
+                }
             }
+            for(let i = 0; i < pieceLocArr.length; i++){
+                if(pieceLocArr[i] > 169){allowFall = false}
+            }
+            if(allowFall){tetrisBoard.currPiece.location += 10}
             this.runner = 0;
         }
     }},
