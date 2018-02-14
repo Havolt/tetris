@@ -16,6 +16,7 @@ function creElT(type, cls, apnd, inHL, id){
 let tetrisBoard = {
     moveTimer : true,
     rotateTimer: true,
+    rotateMove : 0,
     tileArr : [],
     pieces: [],
     currPiece: {name : '', map: '', direction: '', truePos : []},
@@ -59,6 +60,8 @@ let tetrisBoard = {
     },
     //Picks current Piece
     selectPiece: function(arr, chosenPiece, dir){
+
+        console.log(tetrisBoard.rotateMove);
         
         if(arr.length > 0){
             let spRand = Math.floor(Math.random()*arr.length);
@@ -72,13 +75,12 @@ let tetrisBoard = {
             this.currPiece.name = arr[spRand].name;
             this.currPiece.color = arr[spRand].color;
             this.currPiece.location = 3;
-            console.log(arr[spRand])
         }
         else{
-            console.log(dir)
             this.currPiece.map = chosenPiece[dir];
             this.currPiece.direction = dir;
         }
+        this.rotateMove = 0;
     },
     //Places piece on map
     movePiece: function(){
@@ -99,6 +101,15 @@ let tetrisBoard = {
         }
 
     },
+    createLocationArr: function(arr, newArr){
+        for(let i = 0; i < arr.length; i++){
+            if(arr[i] == 1){
+                let locMultiplier = Math.floor(((i) / 4)) * 6;
+                let currLoc = this.currPiece.location + locMultiplier + i;
+                newArr.push(currLoc)
+            }
+        }
+    },
     //Guides correct event listeners to right functions
     eventListenerGate: function(e){
         if(e.keyCode == 90 || e.keyCode == 67){
@@ -110,7 +121,6 @@ let tetrisBoard = {
     },
     //Gives user ability to rotate piece
     userRotatePiece: function(e){
-        console.log(this.currPiece);
         //Checkes direction of currPiece and assigns numeric value
         let direc = 0;
         if(this.currPiece.direction == 'e'){direc = 1}
@@ -128,28 +138,82 @@ let tetrisBoard = {
         else if(direc == 2){direc = 's'}
         else if(direc == 3){direc = 'w'}
 
-        //Need to insert gate
+        function checkWrap(num){
 
+
+            let displaceDir = 0;
+            
+            let checkNewArr = []
+            if(num == 0){displaceDir = 1}else if(num == 9){displaceDir = -1};
+            for(let i = 0; i < tetrisBoard.pieces.length; i++){
+                if(tetrisBoard.currPiece.name == tetrisBoard.pieces[i].name){
+                    tetrisBoard.createLocationArr(tetrisBoard.pieces[i][direc], checkNewArr)
+                    
+                }
+                
+            }
+
+            let moverVar = 0;            
+            
+            for(let i = 0; i < checkNewArr.length; i++){
+                if(num == 0){
+                    let lastPosCheck = checkNewArr[i].toString().split('').pop();
+                    if(lastPosCheck.toString().split().pop() == 8){
+                        moverVar = 2;
+                    }else if(lastPosCheck.toString().split('').pop() == 9 && moverVar != 2){
+                        moverVar = 1;
+                    }
+                }else if(num == 9){
+                    let lastPosCheck = checkNewArr[i].toString().split('').pop();
+                    if(lastPosCheck.toString().split().pop() == 1){
+                        moverVar = -2;
+                    }else if(lastPosCheck.toString().split('').pop() == 0 && moverVar != -2){
+                        moverVar = -1;
+                    }
+                }
+            }
+            tetrisBoard.rotateMove = moverVar;
+
+            
+        }
+        
+
+        //Check if piece is at edge of screen
+
+        let needCheck = false;
+        let needCheckNum;
+        for(let i = 0; i < this.currPiece.map.length; i++){
+            if(this.currPiece.map[i] == 1){
+                let locMultiplier = Math.floor(((i) / 4)) * 6;
+                let currLoc = this.currPiece.location + locMultiplier + i;
+                let currLocString = currLoc.toString().split('').pop();
+                if(currLocString == 0 || currLocString == 9){
+                    needCheck = true;
+                    needCheckNum = currLocString;
+                }
+            }
+        }
+        if(needCheck){checkWrap(needCheckNum);}
+        this.currPiece.location += this.rotateMove;
+
+
+        //Code stops rotation if in conflict with another piece
         let rotateCheck = [];
         let allowRotate = true;
-
         for(let i = 0; i < this.pieces.length; i++){
             if(this.currPiece.name == this.pieces[i].name){
                 rotateCheck = this.pieces[i][direc];
             }
         }
-
         for(let i = 0; i < rotateCheck.length; i++){
             if(rotateCheck[i] == 1){
                 let locMultiplier = Math.floor(((i) / 4)) * 6;
-                currLoc = this.currPiece.location + locMultiplier + i;
-                console.log(currLoc);
-                if(!this.tileArr[currLoc].empty && this.tileArr[currLoc].permanent){allowRotate = false; console.log(allowRotate)}
+                let currLoc = this.currPiece.location + locMultiplier + i;
+                if(!this.tileArr[currLoc].empty && this.tileArr[currLoc].permanent){allowRotate = false;}
             }
         }
 
 
-        //Gate goes above
         if(allowRotate){
             for(let i = 0; i < this.pieces.length; i++){
                 if(this.pieces[i].name == this.currPiece.name){
