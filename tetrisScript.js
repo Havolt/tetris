@@ -55,7 +55,7 @@ let tetrisBoard = {
         //Z-Shape
         this.makePieces([[1,4,5,8], [0,1,5,6], [2,5,6,9], [4,5,9,10], 'Z-Shape', 'amber']);
         //S-Shape
-        this.makePieces([[0,4,5,9], [1,2,4,5], [1,5,6,10], [5,6,8,9s], 'S-Shape', 'magenta'] );
+        this.makePieces([[0,4,5,9], [1,2,4,5], [1,5,6,10], [5,6,8,9], 'S-Shape', 'magenta'] );
     },
     //Picks current Piece
     selectPiece: function(arr, chosenPiece, dir){
@@ -82,7 +82,6 @@ let tetrisBoard = {
     },
     //Places piece on map
     movePiece: function(){
-        //console.log('boop')
         for(let i = 0; i < this.tileArr.length; i++){
             if(i == this.currPiece.location){
                 let posRunSmall = 0;
@@ -129,9 +128,33 @@ let tetrisBoard = {
         else if(direc == 2){direc = 's'}
         else if(direc == 3){direc = 'w'}
 
+        //Need to insert gate
+
+        let rotateCheck = [];
+        let allowRotate = true;
+
         for(let i = 0; i < this.pieces.length; i++){
-            if(this.pieces[i].name == this.currPiece.name){
-                this.selectPiece([], this.pieces[i], direc  )
+            if(this.currPiece.name == this.pieces[i].name){
+                rotateCheck = this.pieces[i][direc];
+            }
+        }
+
+        for(let i = 0; i < rotateCheck.length; i++){
+            if(rotateCheck[i] == 1){
+                let locMultiplier = Math.floor(((i) / 4)) * 6;
+                currLoc = this.currPiece.location + locMultiplier + i;
+                console.log(currLoc);
+                if(!this.tileArr[currLoc].empty && this.tileArr[currLoc].permanent){allowRotate = false; console.log(allowRotate)}
+            }
+        }
+
+
+        //Gate goes above
+        if(allowRotate){
+            for(let i = 0; i < this.pieces.length; i++){
+                if(this.pieces[i].name == this.currPiece.name){
+                    this.selectPiece([], this.pieces[i], direc  )
+                }
             }
         }
     },
@@ -163,6 +186,7 @@ let tetrisBoard = {
         };
         tetrisBoard.moveTimer = false;
     },
+    //Gets data values of locations
     getTruePositions: function(){
         tetrisBoard.currPiece.truePos = [];
         for(let i = 0; i < tetrisBoard.currPiece.map.length; i++){
