@@ -279,7 +279,14 @@ let tetrisBoard = {
                     lineComplete = false;
                 }
             }
-            if(lineComplete){console.log('srsly?')}
+            if(lineComplete){
+                //Remove Line
+                for(let j = 0; j < 10; j++){
+                    this.tileArr[(i*10)+j].empty = true;
+                    this.tileArr[(i*10)+j].permanent = false;
+                    this.tileArr[(i*10)+j].classes.pop();
+                }
+            }
         }
     },
     //Fixes pieces into place
