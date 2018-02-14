@@ -43,19 +43,19 @@ let tetrisBoard = {
     //Makes pieces basic information
     makePiecesBlueprint: function(){
         //Line
-        this.makePieces([[2,6,10,14], [8,9,10,11], [1,5,9,13], [4,5,6,7], 'Line', 'orange']);
+        this.makePieces([[1,5,9,13], [4,5,6,7], [2,6,10,14], [8,9,10,11], 'Line', 'orange']);
         //Square
         this.makePieces([[5,6,9,10], [5,6,9,10], [5,6,9,10], [5,6,9,10], 'Square', 'yellow']);
         //L-Shape
-        this.makePieces([[1,5,9,10], [2,4,5,6], [0,1,5,9], [4,5,6,8], 'L-Shape', 'red']);
+        this.makePieces([[0,1,5,9], [2,4,5,6], [1,5,9,10], [4,5,6,8], 'L-Shape', 'red']);
         //J-Shape
-        this.makePieces([[1,5,9,10], [0,4,5,6], [1,2,5,9], [4,5,6,10], 'J-Shape', 'cyan']);
+        this.makePieces([[1,2,5,9], [4,5,6,10], [1,5,8,9], [0,4,5,6], 'J-Shape', 'cyan']);
         //Tee
-        this.makePieces([[4,5,6,9], [1,4,5,9], [1,5,6,9], [1,4,5,6], 'Tee', 'green']);
+        this.makePieces([[1,4,5,6], [1,5,6,9], [4,5,6,9], [1,4,5,9], 'Tee', 'green']);
         //Z-Shape
-        this.makePieces([[2,5,6,9], [4,5,9,10], [1,4,5,8], [0,1,5,6], 'Z-Shape', 'amber']);
+        this.makePieces([[1,4,5,8], [0,1,5,6], [2,5,6,9], [4,5,9,10], 'Z-Shape', 'amber']);
         //S-Shape
-        this.makePieces([[1,5,6,10], [5,6,8,9], [0,4,5,9], [1,2,4,5], 'S-Shape', 'magenta'] );
+        this.makePieces([[0,4,5,9], [1,2,4,5], [1,5,6,10], [5,6,8,9s], 'S-Shape', 'magenta'] );
     },
     //Picks current Piece
     selectPiece: function(arr, chosenPiece, dir){
