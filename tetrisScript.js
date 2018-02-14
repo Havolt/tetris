@@ -14,6 +14,7 @@ function creElT(type, cls, apnd, inHL, id){
 }
 //Object holds all data
 let tetrisBoard = {
+    keyFired: false,
     moveTimer : true,
     rotateTimer: true,
     rotateMove : 0,
@@ -61,7 +62,6 @@ let tetrisBoard = {
     //Picks current Piece
     selectPiece: function(arr, chosenPiece, dir){
 
-        console.log(tetrisBoard.rotateMove);
         
         if(arr.length > 0){
             let spRand = Math.floor(Math.random()*arr.length);
@@ -112,6 +112,8 @@ let tetrisBoard = {
     },
     //Guides correct event listeners to right functions
     eventListenerGate: function(e){
+
+
         if(e.keyCode == 90 || e.keyCode == 67){
             this.userRotatePiece(e);
         }
@@ -195,6 +197,7 @@ let tetrisBoard = {
         }
         if(needCheck){checkWrap(needCheckNum);}
         this.currPiece.location += this.rotateMove;
+        this.currPiece.userLoc += this.rotateMove;
 
 
         //Code stops rotation if in conflict with another piece
@@ -220,6 +223,10 @@ let tetrisBoard = {
                     this.selectPiece([], this.pieces[i], direc  )
                 }
             }
+        }
+        else{
+            this.currPiece.location -= this.rotateMove;
+            this.currPiece.userLoc -= this.rotateMove;
         }
     },
     //Gives user ability to move piece
@@ -263,6 +270,18 @@ let tetrisBoard = {
             }
         }
     },
+    //Check to see if there is a full line
+    checkCompleteLine: function(){
+        for(let i = 0; i < this.tileArr.length/10; i++){
+            let lineComplete = true;
+            for(let j = 0; j < 10; j++){
+                if(this.tileArr[(i*10)+j].empty || !this.tileArr[(i*10)+j].permanent){
+                    lineComplete = false;
+                }
+            }
+            if(lineComplete){console.log('srsly?')}
+        }
+    },
     //Fixes pieces into place
     fixPiece: function(pce){
         for(let i = 0; i < pce.length; i++){
@@ -271,6 +290,7 @@ let tetrisBoard = {
             tetrisBoard.tileArr[pce[i]].color = tetrisBoard.currPiece.color;
             tetrisBoard.selectPiece(tetrisBoard.pieces);
         }
+        this.checkCompleteLine();
     },
     //Enacts gravity on pieces
     gravityMove: {runner : 0, gravFunc: function(){
@@ -335,7 +355,7 @@ let tetrisBoard = {
         document.getElementsByClassName('map')[0].innerHTML = '';
         this.movePiece();
         this.drawMap(arr);
-        setTimeout(function(){tetrisBoard.intervalCall(tetrisBoard.tileArr);}, 50);
+        setTimeout(function(){tetrisBoard.intervalCall(tetrisBoard.tileArr);}, 40);
     }
 };
 
@@ -350,8 +370,13 @@ let tetrisBoard = {
     tetrisBoard.drawMap(tetrisBoard.tileArr);
     tetrisBoard.selectPiece(tetrisBoard.pieces);
     document.addEventListener('keydown', function(){
-        if(tetrisBoard.moveTimer){tetrisBoard.eventListenerGate(event)}
+        if(tetrisBoard.moveTimer && !tetrisBoard.keyFired){tetrisBoard.eventListenerGate(event)
+        tetrisBoard.keyFired = true;}
     })
+    document.addEventListener('keyup', function(){
+        tetrisBoard.keyFired = false;
+    })
+    
     setTimeout(function(){
         tetrisBoard.intervalCall(tetrisBoard.tileArr);
     }, 400)
