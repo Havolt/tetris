@@ -284,6 +284,7 @@ let tetrisBoard = {
                 //Remove Line
                 for(let j = 0; j < 10; j++){
                     this.tileArr[(i*10)+j].empty = true;
+                    this.tileArr[(i*10)+j].color = "";
                     this.tileArr[(i*10)+j].permanent = false;
                     this.tileArr[(i*10)+j].classes.pop();
 
@@ -327,7 +328,7 @@ let tetrisBoard = {
                 }
             }
             if(allCanMove){
-                for(let j = 0; j < arr[i].length; j++){
+                for(let j = arr[i].length-1; j >= 0; j--){
                     console.log(this.tileArr[arr[i][j]])
                     console.log(arr[i][j]+10 + ' but the maximum number is 179')
                     this.tileArr[arr[i][j]+10].empty = this.tileArr[arr[i][j]].empty;
