@@ -288,27 +288,67 @@ let tetrisBoard = {
                     this.tileArr[(i*10)+j].classes.pop();
 
                     for(let k = 0; k < this.connectedPieces.length; k++){
-                        console.log(this.connectedPieces)
                         for(let l = 0; l < this.connectedPieces[k].length; l++){
                             if(this.connectedPieces[k][l] == (i*10)+j){
                                 this.connectedPieces[k].splice(l, 1);
                                 l--;
                             }
-                            if(this.connectedPieces[k].length == 0){
-                                this.connectedPieces.splice(k, 1);
-                                k--;
-                            }
+                            
+                        console.log(this.connectedPieces[k].length)
+                        }
+                        if(this.connectedPieces[k].length == 0){
+                            this.connectedPieces.splice(k, 1);
+                            k--;
                         }
                     }
                 }
                 //check if piece can fall
+                console.log(this.connectedPieces)
                 this.emptySpaceCheck(this.connectedPieces);
             }
         }
     },
     emptySpaceCheck: function(arr){
         for(let i = 0; i < arr.length; i++){
-            for(let j = 0; j < arr[i].length; j++){}
+            let allCanMove = true;
+            for(let j = 0; j < arr[i].length; j++){
+                //Checks if tile under it is empty
+                if(this.tileArr[i][j]){
+                    if(!this.tileArr[arr[i][j]+10].empty){
+                        allCanMove = false;
+                        let samePiece = false;
+                        for(let k = 0; k < arr[i].length; k++){
+                            //Checks if tile under it belongs to same piece
+                            if(arr[i][j]+10 == arr[i][k]){samePiece = true}
+                        }
+                        //Makes piece not move if not same
+                        if(samePiece){allCanMove = true}
+                    }
+                }
+            }
+            if(allCanMove){
+                for(let j = 0; j < arr[i].length; j++){
+                    console.log(this.tileArr[arr[i][j]])
+                    console.log(arr[i][j]+10 + ' but the maximum number is 179')
+                    this.tileArr[arr[i][j]+10].empty = this.tileArr[arr[i][j]].empty;
+                    this.tileArr[arr[i][j]+10].permanent = this.tileArr[arr[i][j]].permanent;
+                    this.tileArr[arr[i][j]+10].color = this.tileArr[arr[i][j]].color;
+
+                    this.tileArr[arr[i][j]+10].classes.push(this.tileArr[arr[i][j]].classes[this.tileArr[arr[i][j]].classes.length-1]);
+                    
+                    this.tileArr[arr[i][j]].color = "";
+                    this.tileArr[arr[i][j]].permanent = false;
+                    this.tileArr[arr[i][j]].empty = true;
+                    
+                    for(let k = 0; k < this.tileArr[arr[i][j]].classes.length; k++){
+                        if(this.tileArr[arr[i][j]].classes[k] != 'tile' && this.tileArr[arr[i][j]].classes[k] != 'firstXTile'){
+                            console.log(this.tileArr[arr[i][j]].classes[k])
+                            this.tileArr[arr[i][j]].classes.splice(k, 1);
+                            k--;
+                        }
+                    }
+                }
+            }
         }
     },
     //Fixes pieces into place
