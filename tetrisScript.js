@@ -18,6 +18,7 @@ let tetrisBoard = {
     moveTimer : true,
     rotateTimer: true,
     rotateMove : 0,
+    connectedPieces: [],
     tileArr : [],
     pieces: [],
     currPiece: {name : '', map: '', direction: '', truePos : []},
@@ -285,8 +286,29 @@ let tetrisBoard = {
                     this.tileArr[(i*10)+j].empty = true;
                     this.tileArr[(i*10)+j].permanent = false;
                     this.tileArr[(i*10)+j].classes.pop();
+
+                    for(let k = 0; k < this.connectedPieces.length; k++){
+                        console.log(this.connectedPieces)
+                        for(let l = 0; l < this.connectedPieces[k].length; l++){
+                            if(this.connectedPieces[k][l] == (i*10)+j){
+                                this.connectedPieces[k].splice(l, 1);
+                                l--;
+                            }
+                            if(this.connectedPieces[k].length == 0){
+                                this.connectedPieces.splice(k, 1);
+                                k--;
+                            }
+                        }
+                    }
                 }
+                //check if piece can fall
+                this.emptySpaceCheck(this.connectedPieces);
             }
+        }
+    },
+    emptySpaceCheck: function(arr){
+        for(let i = 0; i < arr.length; i++){
+            for(let j = 0; j < arr[i].length; j++){}
         }
     },
     //Fixes pieces into place
@@ -297,6 +319,7 @@ let tetrisBoard = {
             tetrisBoard.tileArr[pce[i]].color = tetrisBoard.currPiece.color;
             tetrisBoard.selectPiece(tetrisBoard.pieces);
         }
+        this.connectedPieces.push(pce);
         this.checkCompleteLine();
     },
     //Enacts gravity on pieces
