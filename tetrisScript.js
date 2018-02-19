@@ -310,6 +310,15 @@ let tetrisBoard = {
         }
     },
     emptySpaceCheck: function(arr){
+
+        ///////////////////////////////////////////////////////////////////////////////////
+        ////Need to make sure that allCanMove is false if a number is higher than 179 /////
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////////
+        ////If piece is moved to late then the tile is filled but it is not given a color /
+        ///////////////////////////////////////////////////////////////////////////////////
+
         for(let i = 0; i < arr.length; i++){
             let allCanMove = true;
             for(let j = 0; j < arr[i].length; j++){
@@ -324,6 +333,7 @@ let tetrisBoard = {
                         }
                         //Makes piece not move if not same
                         if(samePiece){allCanMove = true}
+                        if(this.tileArr[arr[i][j]]+10 > 179){allCanMove = false;}
                     }
                 }
             }
@@ -335,7 +345,16 @@ let tetrisBoard = {
                     this.tileArr[arr[i][j]+10].permanent = this.tileArr[arr[i][j]].permanent;
                     this.tileArr[arr[i][j]+10].color = this.tileArr[arr[i][j]].color;
 
-                    this.tileArr[arr[i][j]+10].classes.push(this.tileArr[arr[i][j]].classes[this.tileArr[arr[i][j]].classes.length-1]);
+
+                    for(let k = 0; k < this.tileArr[arr[i][j]].classes.length; k++){
+                        if(this.tileArr[arr[i][j]].classes[k] != 'tile' && this.tileArr[arr[i][j]].classes[k] != 'firstXTile'){
+                            console.log(this.tileArr[arr[i][j]+10].classes)
+                            this.tileArr[arr[i][j]+10].classes.push(this.tileArr[arr[i][j]].classes[k]);
+                        }
+                    }
+
+
+
                     
                     this.tileArr[arr[i][j]].color = "";
                     this.tileArr[arr[i][j]].permanent = false;
@@ -366,7 +385,7 @@ let tetrisBoard = {
     //Enacts gravity on pieces
     gravityMove: {runner : 0, gravFunc: function(){
         this.runner++;
-        if(this.runner == 10){
+        if(this.runner == 8){
             let allowFall = true;
             for(let i = 0; i < tetrisBoard.currPiece.truePos.length; i++){
                 if(tetrisBoard.currPiece.truePos[i] > 169){allowFall = false; break;}
