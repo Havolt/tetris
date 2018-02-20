@@ -14,6 +14,9 @@ function creElT(type, cls, apnd, inHL, id){
 
 let tetrisObj = {};
 
+                                        ////Data Creation Section/////
+
+//Creates Data in tetrisObj of map
 function createMapData(obj){
     let newArr = [];
     for(let i = 0; i < 180; i++){
@@ -24,11 +27,14 @@ function createMapData(obj){
         arrObj.empty = true;
         arrObj.permanent = false;
         arrObj.color = "";
+        arrObj.classes = ['tile'];
+        if(arrObj.x == 0){arrObj.classes.push('firstTileX')};
         newArr.push(arrObj);
     }
     obj.mapData = newArr;
 }
 
+//Accepts passes from createShapeDataCaller to make piece data and place it into tetrisObj.pieceTypes
  function createShapeData(piece, obj){
     let newOb = {}
     for(let h = 0; h < piece.length-1; h++){
@@ -51,6 +57,7 @@ function createMapData(obj){
     obj.push(newOb);
 }
 
+//Calls createShapeData multiple times with different shapes
 function createShapeDataCaller(obj){
         let newArr = [];
         tetrisObj.pieceTypes = newArr;
@@ -71,9 +78,22 @@ function createShapeDataCaller(obj){
 }
 
 
+                                        ////Map Creation Section/////
+
+    function createMap(arr){
+        
+        for(let i = 0; i < arr.length; i++){
+            creElT('div', arr[i].classes, document.getElementsByClassName('tetrisBoard')[0]);
+        }
+    }
+
+
 
 (function initApp(){
+    creElT('div', 'app', document.body, '', 'app');
+    creElT('div', 'tetrisBoard', document.getElementById('app'));
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
+    createMap(tetrisObj.mapData)
     console.log(tetrisObj);
 })()
