@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {};
+let tetrisObj = {timer : 800};
 
                                         ////Data Creation Section/////
 
@@ -80,11 +80,20 @@ function createShapeDataCaller(obj){
 
                                         ////Map Creation Section/////
 
-    function createMap(arr){
-        
+    function drawMap(arr){
+        document.getElementsByClassName('tetrisBoard')[0].innerHTML='';
         for(let i = 0; i < arr.length; i++){
             creElT('div', arr[i].classes, document.getElementsByClassName('tetrisBoard')[0]);
         }
+    }
+
+
+
+                                        ////Recursive Function with setTimeout/////
+
+    function gameEngine(time){
+        drawMap(tetrisObj.mapData);
+        setTimeout(function(){gameEngine(time)}, time);
     }
 
 
@@ -94,6 +103,6 @@ function createShapeDataCaller(obj){
     creElT('div', 'tetrisBoard', document.getElementById('app'));
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
-    createMap(tetrisObj.mapData)
+    gameEngine(tetrisObj.timer);
     console.log(tetrisObj);
 })()

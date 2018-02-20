@@ -14,3 +14,25 @@
 .firstTileX{
     clear: both;
 }
+
+.cyanTile{
+    background: cyan;
+}
+.blueTile{
+    background: blue;
+}
+.orangeTile{
+    background: orange;
+}
+.yellowTile{
+    background: yellow;
+}
+.greenTile{
+    background: green;
+}
+.purpleTile{
+    background: purple;
+}
+.redTile{
+    background: red;
+}
