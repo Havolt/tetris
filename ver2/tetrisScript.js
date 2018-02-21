@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 800, playerPiece : {}};
+let tetrisObj = {timer : 800, playerPiece : {}, nextPiece: {}};
 
                                         ////Data Creation Section/////
 
@@ -90,7 +90,7 @@ function createShapeDataCaller(obj){
 
                                         ////Player Controlled Piece Section/////
 
-    //Selects new piece at random  //Direction // 0 == N // 1 == E // 2 == S// 3 == W // 
+    //Selects new piece at random for nextPiece section  //Direction // 0 == N // 1 == E // 2 == S// 3 == W // 
     function randomPieceSelect(obj, pieces){
         let randPiece = Math.floor(Math.random() * pieces.length);
         let randPieceDir = Math.floor(Math.random() * 4);
@@ -99,24 +99,65 @@ function createShapeDataCaller(obj){
         obj.map = pieces[randPiece][randPieceDir+''];
         obj.color = pieces[randPiece].color;
         obj.userPos = 3;
+        obj.truePos = 3;
+    }
+
+    //Gets playerPiece from nextPiece section
+    function playerPieceSelect(player, next, pieces){
+        player.direction = next.direction;
+        player.shape = next.shape;
+        player.map = next.map;
+        player.color = next.color;
+        player.userPos = 3;
+        player.truePos = 3;
+        randomPieceSelect(next, pieces); 
+    }
+
+    //Sends piece data to tetrisObj.mapData
+    function pieceDataToMap(piece, map){
+        
+        for(let i = 0; i < piece.map.length; i++){
+            if(piece.map[i] == 1){
+                let multiplier = Math.floor(i/4);
+                let levelAdd = 6;
+                levelAdd = levelAdd * multiplier;
+                let tileLoc = piece.truePos + levelAdd + i; 
+                console.log(map[tileLoc]);
+                map[tileLoc].color = piece.color;
+                map[tileLoc].empty = false;
+                map[tileLoc].classes.push(piece.color + 'Tile');
+            }
+        }
     }
 
 
-                                        ////Recursive Function with setTimeout/////
+                                        /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
+        pieceDataToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
         setTimeout(function(){gameEngine(time)}, time);
     }
 
 
 
+
+    
+
+                                        ///// Initializes game /////
+
 (function initApp(){
     creElT('div', 'app', document.body, '', 'app');
     creElT('div', 'tetrisBoard', document.getElementById('app'));
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
-    randomPieceSelect(tetrisObj.playerPiece, tetrisObj.pieceTypes);
+    randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
+    playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
     gameEngine(tetrisObj.timer);
     console.log(tetrisObj);
 })()
+
+
+                                        ///// Adds event listener which allows user to control game /////
+
+document.addEventListener('keydown', function(e){console.log(e)})
