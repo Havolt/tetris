@@ -92,22 +92,70 @@ function createShapeDataCaller(obj){
 
     //Adds player control to game
     function playerControl(e){
+        console.log(e)
         if(e == 37){tetrisObj.movePiece = 1};
         if(e == 39){tetrisObj.movePiece = 2};
-        if(e == 40){tetrisObj.movePiece = 3}
+        if(e == 40){tetrisObj.movePiece = 3};
+        if(e == 90){tetrisObj.movePiece = 4};
+        if(e == 67){tetrisObj.movePiece = 5};
     }
 
-    //Game takes in tetrisObj.movePiece and does correct command //Code// 37 == Left // 39 == Right // 40 == Down //
+    //Game takes in tetrisObj.movePiece and does correct command //Code// 37 == Left // 39 == Right // 40 == Down // 90 == Anti-Clock // 67 == Clock
     function userCommands(comm, arr){
         let allowMove = true;
+        let nextDirection;
+        let rotatedArr = [];
+        let rotatedArrTrue = [];
         for(let i = 0; i < arr.length; i++){
             if(comm == 1){ if(arr[i].toString().split('').pop() == '0'){allowMove = false}}
+            if(comm == 1){if(tetrisObj.mapData[arr[i]-1].permanent){allowMove = false}}
             if(comm == 2){ if(arr[i].toString().split('').pop() == '9'){allowMove = false}}
+            if(comm == 2){if(tetrisObj.mapData[arr[i]+1].permanent){allowMove = false}}
         }
+
+        //Adds and takes away numbet to get next rotation
+        if(comm == 4){
+            nextDirection = tetrisObj.playerPiece.direction - 1;
+            if(nextDirection < 0){nextDirection = 3};
+        }
+        if(comm == 5){
+            nextDirection = tetrisObj.playerPiece.direction + 1;
+            if(nextDirection > 3){nextDirection = 0};
+       }
+       if(comm == 4 || comm == 5){
+            //Obtains the next rotation map and places it into rotatedArr
+            for(let i = 0; i < tetrisObj.pieceTypes.length; i++){
+                if(tetrisObj.playerPiece.shape == tetrisObj.pieceTypes[i].name){
+                    rotatedArr = tetrisObj.pieceTypes[i][nextDirection];
+                }
+            }
+            //Gets true positions of rotated Piece
+            for(let i = 0; i < rotatedArr.length; i++){
+                    if(rotatedArr[i] == 1){
+                        let multiplier = Math.floor(i/4);
+                        let levelAdd = 6;
+                        levelAdd = levelAdd * multiplier;
+                        let tileLoc = tetrisObj.playerPiece.truePos + levelAdd + i; 
+                        rotatedArrTrue.push(tileLoc);
+                    }
+            }
+            for(let i = 0; i < rotatedArrTrue.length; i++){
+                console.log(tetrisObj.mapData[rotatedArrTrue[i]])
+                if(tetrisObj.mapData[rotatedArrTrue[i]].permanent){allowMove = false}
+            }
+        }
+       console.log(allowMove)
+
+        
         if(allowMove){
             if(comm == 1){tetrisObj.playerPiece.truePos--};
             if(comm == 2){tetrisObj.playerPiece.truePos++};
-            console.log(tetrisObj.playerPiece.truePos)
+            if(comm == 3){tetrisObj.moveDownRunner = 0};
+            if(comm == 4 || comm == 5){removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);}
+            if(comm == 4 || comm == 5){tetrisObj.playerPiece.map = rotatedArr}
+            if(comm == 4 || comm == 5){tetrisObj.playerPiece.trueMap = rotatedArrTrue}
+            if(comm == 4 || comm == 5){tetrisObj.playerPiece.direction = nextDirection}
+            if(comm == 4 || comm == 5){console.log(tetrisObj.playerPiece)}
         }
     } 
 
