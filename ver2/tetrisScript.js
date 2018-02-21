@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 100, playerPiece : {}, nextPiece: {}, moveDownRunner : 10};
+let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: []};
 
                                         ////Data Creation Section/////
 
@@ -146,11 +146,57 @@ function createShapeDataCaller(obj){
     //Erases previous blocks filled by tetris pieces
     function removeEmptyTiles(arr, map){
         for(let i = 0; i < arr.length; i++){
-            map[arr[i]].color = "";
-            map[arr[i]].empty = true;
-            for(let j = 0; j < map[arr[i]].classes.length; j++){
-                if(map[arr[i]].classes[j] != 'tile' && map[arr[i]].classes[j] != 'firstTileX'){map[arr[i]].classes.splice(j, 1); j--;}
+                if(map[arr[i]].permanent == false){
+                map[arr[i]].color = "";
+                map[arr[i]].empty = true;
+                for(let j = 0; j < map[arr[i]].classes.length; j++){
+                    if(map[arr[i]].classes[j] != 'tile' && map[arr[i]].classes[j] != 'firstTileX'){map[arr[i]].classes.splice(j, 1); j--;}
+                }
             }
+        }
+    }
+
+    //What happens when Piece is in a resting position
+    function pieceAtRest(){
+        lockPiece(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);
+        addRestedPiece(tetrisObj.playerPiece.trueMap, tetrisObj.restedPieces);
+        playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
+        console.log(tetrisObj.playerPiece)
+    }
+
+    //Lock Piece into position
+    function lockPiece(arr, map){
+        for(let i = 0; i < arr.length; i++){
+            map[arr[i]].permanent = true;
+        }
+    }
+
+    //Add piece to restedPieces Array
+    function addRestedPiece(arr, restedArr){
+        let newArr = [];
+        for(let i = 0; i < arr.length; i++){
+            newArr.push(arr[i]);
+        }
+        restedArr.push(newArr);
+    }
+
+
+                                            ////Checks if piece is in a resting position/////
+
+    //Will check is piece is in a fixed position
+    function restCheck(piece){
+        let restTrue = false;
+        for(let i = 0; i < piece.trueMap.length; i++){
+            if(piece.trueMap[i] + 10 > tetrisObj.mapData.length){
+                restTrue = true;
+            }
+            else if(tetrisObj.mapData[piece.trueMap[i]+10].permanent){
+                restTrue = true;
+            }
+        }
+        if(restTrue){
+            pieceAtRest();
+            tetrisObj.moveDownRunner = 10;
         }
     }
 
@@ -158,8 +204,11 @@ function createShapeDataCaller(obj){
                                         /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
-        removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData)
-        movePieceDown(tetrisObj.moveDownRunner)
+        if(tetrisObj.moveDownRunner == 0){
+            restCheck(tetrisObj.playerPiece, tetrisObj.moveDownRunner);
+        }
+        removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);
+        movePieceDown(tetrisObj.moveDownRunner);
         realLocationData(tetrisObj.playerPiece, tetrisObj.mapData);
         passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
