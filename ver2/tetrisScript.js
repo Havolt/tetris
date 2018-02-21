@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 800, playerPiece : {}, nextPiece: {}};
+let tetrisObj = {timer : 100, playerPiece : {}, nextPiece: {}, moveDownRunner : 10};
 
                                         ////Data Creation Section/////
 
@@ -107,25 +107,49 @@ function createShapeDataCaller(obj){
         player.direction = next.direction;
         player.shape = next.shape;
         player.map = next.map;
+        player.trueMap = [];
         player.color = next.color;
         player.userPos = 3;
         player.truePos = 3;
         randomPieceSelect(next, pieces); 
     }
 
-    //Sends piece data to tetrisObj.mapData
-    function pieceDataToMap(piece, map){
-        
+    //Gives real location data to Piece
+    function realLocationData(piece){
+        piece.trueMap = [];
         for(let i = 0; i < piece.map.length; i++){
             if(piece.map[i] == 1){
                 let multiplier = Math.floor(i/4);
                 let levelAdd = 6;
                 levelAdd = levelAdd * multiplier;
                 let tileLoc = piece.truePos + levelAdd + i; 
-                console.log(map[tileLoc]);
-                map[tileLoc].color = piece.color;
-                map[tileLoc].empty = false;
-                map[tileLoc].classes.push(piece.color + 'Tile');
+                piece.trueMap.push(tileLoc);
+            }
+        }
+    }
+
+    //Pass precise values of pieces to mapData
+    function passPosToMap(piece, map){
+        for(let i = 0; i < piece.trueMap.length; i++){
+            map[piece.trueMap[i]].color = piece.color;
+            map[piece.trueMap[i]].classes.push(piece.color + 'Tile');
+            map[piece.trueMap[i]].empty = false;
+        }
+    }
+
+    //Move truePos down a level after certain amount of time
+    function movePieceDown(runner){
+        tetrisObj.moveDownRunner--;
+        if(runner == 0){ removeEmptyTiles(tetrisObj.playerPiece); tetrisObj.playerPiece.truePos += 10; tetrisObj.moveDownRunner = 10; };
+    }
+
+    //Erases previous blocks filled by tetris pieces
+    function removeEmptyTiles(arr, map){
+        for(let i = 0; i < arr.length; i++){
+            map[arr[i]].color = "";
+            map[arr[i]].empty = true;
+            for(let j = 0; j < map[arr[i]].classes.length; j++){
+                if(map[arr[i]].classes[j] != 'tile' && map[arr[i]].classes[j] != 'firstTileX'){map[arr[i]].classes.splice(j, 1); j--;}
             }
         }
     }
@@ -134,7 +158,10 @@ function createShapeDataCaller(obj){
                                         /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
-        pieceDataToMap(tetrisObj.playerPiece, tetrisObj.mapData);
+        removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData)
+        movePieceDown(tetrisObj.moveDownRunner)
+        realLocationData(tetrisObj.playerPiece, tetrisObj.mapData);
+        passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
         setTimeout(function(){gameEngine(time)}, time);
     }
