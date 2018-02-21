@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: []};
+let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0};
 
                                         ////Data Creation Section/////
 
@@ -90,6 +90,27 @@ function createShapeDataCaller(obj){
 
                                         ////Player Controlled Piece Section/////
 
+    //Adds player control to game
+    function playerControl(e){
+        if(e == 37){tetrisObj.movePiece = 1};
+        if(e == 39){tetrisObj.movePiece = 2};
+        if(e == 40){tetrisObj.movePiece = 3}
+    }
+
+    //Game takes in tetrisObj.movePiece and does correct command //Code// 37 == Left // 39 == Right // 40 == Down //
+    function userCommands(comm, arr){
+        let allowMove = true;
+        for(let i = 0; i < arr.length; i++){
+            if(comm == 1){ if(arr[i].toString().split('').pop() == '0'){allowMove = false}}
+            if(comm == 2){ if(arr[i].toString().split('').pop() == '9'){allowMove = false}}
+        }
+        if(allowMove){
+            if(comm == 1){tetrisObj.playerPiece.truePos--};
+            if(comm == 2){tetrisObj.playerPiece.truePos++};
+            console.log(tetrisObj.playerPiece.truePos)
+        }
+    } 
+
     //Selects new piece at random for nextPiece section  //Direction // 0 == N // 1 == E // 2 == S// 3 == W // 
     function randomPieceSelect(obj, pieces){
         let randPiece = Math.floor(Math.random() * pieces.length);
@@ -161,7 +182,6 @@ function createShapeDataCaller(obj){
         lockPiece(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);
         addRestedPiece(tetrisObj.playerPiece.trueMap, tetrisObj.restedPieces);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
-        console.log(tetrisObj.playerPiece)
     }
 
     //Lock Piece into position
@@ -204,6 +224,10 @@ function createShapeDataCaller(obj){
                                         /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
+        if(tetrisObj.movePiece){
+            userCommands(tetrisObj.movePiece, tetrisObj.playerPiece.trueMap);
+            tetrisObj.movePiece = 0;
+        }
         if(tetrisObj.moveDownRunner == 0){
             restCheck(tetrisObj.playerPiece, tetrisObj.moveDownRunner);
         }
@@ -236,4 +260,6 @@ function createShapeDataCaller(obj){
 
                                         ///// Adds event listener which allows user to control game /////
 
-document.addEventListener('keydown', function(e){console.log(e)})
+document.addEventListener('keydown', function(e){
+    playerControl(e.keyCode)
+})
