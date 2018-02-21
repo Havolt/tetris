@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 800};
+let tetrisObj = {timer : 800, playerPiece : {}};
 
                                         ////Data Creation Section/////
 
@@ -47,10 +47,10 @@ function createMapData(obj){
             if(sameNum){newPiece.push(1)}
             else{newPiece.push(0)}
         }
-        if(h == 0){newOb.n = newPiece};
-        if(h == 1){newOb.e = newPiece};
-        if(h == 2){newOb.s = newPiece};
-        if(h == 3){newOb.w = newPiece};
+        if(h == 0){newOb['0'] = newPiece};
+        if(h == 1){newOb['1'] = newPiece};
+        if(h == 2){newOb['2'] = newPiece};
+        if(h == 3){newOb['3'] = newPiece};
     }
     newOb.name = piece[4];
     newOb.color = piece[5];
@@ -80,6 +80,7 @@ function createShapeDataCaller(obj){
 
                                         ////Map Creation Section/////
 
+    //Draws map based on what is in the tetrisObj.mapData
     function drawMap(arr){
         document.getElementsByClassName('tetrisBoard')[0].innerHTML='';
         for(let i = 0; i < arr.length; i++){
@@ -87,6 +88,18 @@ function createShapeDataCaller(obj){
         }
     }
 
+                                        ////Player Controlled Piece Section/////
+
+    //Selects new piece at random  //Direction // 0 == N // 1 == E // 2 == S// 3 == W // 
+    function randomPieceSelect(obj, pieces){
+        let randPiece = Math.floor(Math.random() * pieces.length);
+        let randPieceDir = Math.floor(Math.random() * 4);
+        obj.direction = randPieceDir;
+        obj.shape = pieces[randPiece].name;
+        obj.map = pieces[randPiece][randPieceDir+''];
+        obj.color = pieces[randPiece].color;
+        obj.userPos = 3;
+    }
 
 
                                         ////Recursive Function with setTimeout/////
@@ -103,6 +116,7 @@ function createShapeDataCaller(obj){
     creElT('div', 'tetrisBoard', document.getElementById('app'));
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
+    randomPieceSelect(tetrisObj.playerPiece, tetrisObj.pieceTypes);
     gameEngine(tetrisObj.timer);
     console.log(tetrisObj);
 })()
