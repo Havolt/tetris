@@ -393,14 +393,21 @@ function createShapeDataCaller(obj){
             for(let j = tetrisObj.mapData.length-1; j >= 0; j--){
                 if(tetrisObj.mapData[j].y < dropLevels[i]){
                     
-                    console.log(dropLevels)
+
                     tetrisObj.mapData[j+10].color = tetrisObj.mapData[j].color;
                     tetrisObj.mapData[j+10].empty = tetrisObj.mapData[j].empty;
                     tetrisObj.mapData[j+10].permanent = tetrisObj.mapData[j].permanent;
-                    //tetrisObj.mapData[j+10].classes = tetrisObj.mapData[j].classes;
                     tetrisObj.mapData[j+10].classes = [];
                     for(let k = 0; k < tetrisObj.mapData[j].classes.length; k++){
                         tetrisObj.mapData[j+10].classes.push(tetrisObj.mapData[j].classes[k]);
+                    }
+
+                    for(let k = 0; k < tetrisObj.restedPieces.length; k++){
+                        for(let l = 0; l < tetrisObj.restedPieces[k].length; l++){
+                            if(tetrisObj.mapData[j].num == tetrisObj.restedPieces[k][l]){
+                                tetrisObj.restedPieces[k][l] += 10;
+                            }
+                        }
                     }
 
                     
@@ -412,12 +419,37 @@ function createShapeDataCaller(obj){
             }
         }
         
+        gravity(tetrisObj.restedPieces, tetrisObj.mapData);
         
     }
 
-    //Enacts gravity on floating blocks after removeLines is complete
+    //Enacts gravity on floating blocks 
     function gravity(restArr, mapArr){
         
+        for(i = mapArr.length-1; i >= 0; i--){
+            for(let j = 0; j < restArr.length; j++){
+                for(let k = 0; k < restArr[j].length; k++){
+                    if(mapArr[i].num == restArr[j][k]){
+
+
+                        let possibleGrav = true;
+
+                        for(l = 0; l < restArr[j].length; l++){
+                            let samePiece = false;
+                            for(let m = 0; m < restArr[j].length; m++){
+                                if(restArr[j][l]+10 == restArr[j][m]){samePiece = true;}
+                            }
+                            if(mapArr[restArr[j][l]+10]){
+                                if(mapArr[restArr[j][l]+10].permanent && !samePiece){possibleGrav = false}
+                            }else{possibleGrav = false}
+                            
+                        }
+
+                        console.log(possibleGrav);
+                    }
+                }
+            }
+        }
     }
 
 
