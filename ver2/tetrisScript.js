@@ -92,7 +92,6 @@ function createShapeDataCaller(obj){
 
     //Adds player control to game
     function playerControl(e){
-        console.log(e)
         if(e == 37){tetrisObj.movePiece = 1};
         if(e == 39){tetrisObj.movePiece = 2};
         if(e == 40){tetrisObj.movePiece = 3};
@@ -103,9 +102,11 @@ function createShapeDataCaller(obj){
     //Game takes in tetrisObj.movePiece and does correct command //Code// 37 == Left // 39 == Right // 40 == Down // 90 == Anti-Clock // 67 == Clock
     function userCommands(comm, arr){
         let allowMove = true;
+        let displacement = 0;
         let nextDirection;
         let rotatedArr = [];
         let rotatedArrTrue = [];
+        let moveTruePos = 0;
         for(let i = 0; i < arr.length; i++){
             if(comm == 1){ if(arr[i].toString().split('').pop() == '0'){allowMove = false}}
             if(comm == 1){if(tetrisObj.mapData[arr[i]-1].permanent){allowMove = false}}
@@ -113,7 +114,7 @@ function createShapeDataCaller(obj){
             if(comm == 2){if(tetrisObj.mapData[arr[i]+1].permanent){allowMove = false}}
         }
 
-        //Adds and takes away numbet to get next rotation
+        //Adds and takes away number to get next rotation
         if(comm == 4){
             nextDirection = tetrisObj.playerPiece.direction - 1;
             if(nextDirection < 0){nextDirection = 3};
@@ -122,7 +123,31 @@ function createShapeDataCaller(obj){
             nextDirection = tetrisObj.playerPiece.direction + 1;
             if(nextDirection > 3){nextDirection = 0};
        }
+
+
+       ////////////////// NEED TO CHECK IF POSITION IS AGAINST WALL IF ROTATING THEN NEED TO CHECK IF ITS ROTATING ONTO NEXT LEVEL //////////
+       
+
+
+
+       let onLeft = false;
+       let onRight = false;
+
+       //Checks if piece is in a position on Right or Left to be checked for rotation overlaps
        if(comm == 4 || comm == 5){
+            for(let i = 0; i < arr.length; i++){
+                
+                if(arr[i].toString().split('').pop() == 8 || arr[i].toString().split('').pop() == 9 ){
+                    onRight = true;
+                }
+                if(arr[i].toString().split('').pop() == 0 || arr[i].toString().split('').pop() == 1){
+                    onLeft = true;
+                }
+            }
+
+
+
+
             //Obtains the next rotation map and places it into rotatedArr
             for(let i = 0; i < tetrisObj.pieceTypes.length; i++){
                 if(tetrisObj.playerPiece.shape == tetrisObj.pieceTypes[i].name){
@@ -139,12 +164,37 @@ function createShapeDataCaller(obj){
                         rotatedArrTrue.push(tileLoc);
                     }
             }
+
+            //Checks if piece on side overlaps to next level on rotation
+            if(onLeft || onRight){
+                for(let i = 0; i < rotatedArrTrue.length; i++){
+                    
+                    if(onLeft){
+                        if(rotatedArrTrue[i].toString().split('').pop() == 8){displacement = 2};
+                        if(rotatedArrTrue[i].toString().split('').pop() == 9 && displacement != 2){displacement = 1};
+                    }
+                    if(onRight){
+                        if(rotatedArrTrue[i].toString().split('').pop() == 1){displacement = -2};
+                        if(rotatedArrTrue[i].toString().split('').pop() == 0 && displacement != -2){displacement = -1};
+                    }
+                    
+                }
+            }
+            console.log(rotatedArrTrue)
+            //Assigns new values to pieces dependant on displacement var
+            if((onLeft || onRight) && displacement){
+                for(let i = 0; i < rotatedArrTrue.length; i++){
+                    rotatedArrTrue[i] = rotatedArrTrue[i] + displacement;
+                }
+            }
+            console.log(rotatedArrTrue)
+
+
+            //Checks if pieces it rotates into are taken up
             for(let i = 0; i < rotatedArrTrue.length; i++){
-                console.log(tetrisObj.mapData[rotatedArrTrue[i]])
                 if(tetrisObj.mapData[rotatedArrTrue[i]].permanent){allowMove = false}
             }
         }
-       console.log(allowMove)
 
         
         if(allowMove){
@@ -153,9 +203,10 @@ function createShapeDataCaller(obj){
             if(comm == 3){tetrisObj.moveDownRunner = 0};
             if(comm == 4 || comm == 5){removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);}
             if(comm == 4 || comm == 5){tetrisObj.playerPiece.map = rotatedArr}
+            if(comm == 4 || comm == 5){tetrisObj.playerPiece.truePos += displacement}
             if(comm == 4 || comm == 5){tetrisObj.playerPiece.trueMap = rotatedArrTrue}
             if(comm == 4 || comm == 5){tetrisObj.playerPiece.direction = nextDirection}
-            if(comm == 4 || comm == 5){console.log(tetrisObj.playerPiece)}
+            //if(comm == 4 || comm == 5){console.log(tetrisObj.playerPiece)}
         }
     } 
 
@@ -255,7 +306,7 @@ function createShapeDataCaller(obj){
     function restCheck(piece){
         let restTrue = false;
         for(let i = 0; i < piece.trueMap.length; i++){
-            if(piece.trueMap[i] + 10 > tetrisObj.mapData.length){
+            if(piece.trueMap[i] + 10 > tetrisObj.mapData.length-1){
                 restTrue = true;
             }
             else if(tetrisObj.mapData[piece.trueMap[i]+10].permanent){
