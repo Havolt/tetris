@@ -13,6 +13,8 @@ function creElT(type, cls, apnd, inHL, id){
 }
 
 let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0};
+let score = 0;
+let highScore = 0;
 
                                         ////Data Creation Section/////
 
@@ -337,10 +339,15 @@ function createShapeDataCaller(obj){
             if(!nextSameY && allFilled){
                 for(let j = 0; j < rowArr.length; j++){completeRowTiles.push(rowArr[j])}
             }
-            
             if(!nextSameY){allFilled = true; nextSameY = true; rowArr = []}
         }
-        if(completeRowTiles.length){ removeLines(completeRowTiles)}
+        if(completeRowTiles.length){ 
+            removeLines(completeRowTiles);
+            let addPoints = completeRowTiles.length * 10;
+            addPoints = addPoints * Number(completeRowTiles.length.toString().split('').shift())
+            score += addPoints;
+            console.log(score)
+        }
     }
 
     //Removes completed lines from game
@@ -389,7 +396,6 @@ function createShapeDataCaller(obj){
 
         
         for(let i = 0; i < dropLevels.length; i++){
-            console.log(dropLevels[i]);
             for(let j = tetrisObj.mapData.length-1; j >= 0; j--){
                 if(tetrisObj.mapData[j].y < dropLevels[i]){
                     
@@ -444,13 +450,27 @@ function createShapeDataCaller(obj){
                             }else{possibleGrav = false}
                             
                         }
-
-                        console.log(possibleGrav);
+                        if(possibleGrav){
+                            console.log(restArr[j]);
+                        }
+                        
                     }
                 }
             }
         }
     }
+
+
+                                        /////Scoreboard Section/////
+
+    function drawScoreBoard(){
+        creElT('div', 'scoreboard', document.getElementById('app'), '0');
+    }
+
+    function updateScoreBoard(sb){
+        sb.innerHTML = score;
+    }
+
 
 
                                         /////Recursive Function with setTimeout/////
@@ -468,6 +488,7 @@ function createShapeDataCaller(obj){
         realLocationData(tetrisObj.playerPiece, tetrisObj.mapData);
         passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
+        updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
         setTimeout(function(){gameEngine(time)}, time);
     }
 
@@ -483,6 +504,7 @@ function createShapeDataCaller(obj){
     creElT('div', 'tetrisBoard', document.getElementById('app'));
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
+    drawScoreBoard();
     randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
     playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
     gameEngine(tetrisObj.timer);
