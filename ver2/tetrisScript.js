@@ -180,14 +180,13 @@ function createShapeDataCaller(obj){
                     
                 }
             }
-            console.log(rotatedArrTrue)
             //Assigns new values to pieces dependant on displacement var
             if((onLeft || onRight) && displacement){
                 for(let i = 0; i < rotatedArrTrue.length; i++){
                     rotatedArrTrue[i] = rotatedArrTrue[i] + displacement;
                 }
             }
-            console.log(rotatedArrTrue)
+
 
 
             //Checks if pieces it rotates into are taken up
@@ -280,6 +279,7 @@ function createShapeDataCaller(obj){
     function pieceAtRest(){
         lockPiece(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);
         addRestedPiece(tetrisObj.playerPiece.trueMap, tetrisObj.restedPieces);
+        checkLines(tetrisObj.mapData);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
     }
 
@@ -300,7 +300,7 @@ function createShapeDataCaller(obj){
     }
 
 
-                                            ////Checks if piece is in a resting position/////
+                                            /////Checks if piece is in a resting position/////
 
     //Will check is piece is in a fixed position
     function restCheck(piece){
@@ -318,6 +318,45 @@ function createShapeDataCaller(obj){
             tetrisObj.moveDownRunner = 10;
         }
     }
+
+
+                                            /////Section deals with lines of complete tetris/////
+
+    //Checks to see what lines are filled in and passes information on to removeLines()
+    function checkLines(map){
+        let completeRowTiles = [];
+        let rowArr = [];
+        let nextSameY = true;
+        let allFilled = true;
+        for(let i = 0; i < map.length; i++){
+            rowArr.push(map[i]);
+            if(map[i].permanent == false){allFilled = false}
+            if(map[i+1]){
+                if(map[i+1].y != map[i].y){nextSameY = false}
+            }else if(!map[i+1]){nextSameY = false}
+            if(!nextSameY && allFilled){
+                for(let j = 0; j < rowArr.length; j++){completeRowTiles.push(rowArr[j])}
+            }
+            
+            if(!nextSameY){allFilled = true; nextSameY = true; rowArr = []}
+        }
+        if(completeRowTiles.length){ removeLines(completeRowTiles)}
+    }
+
+    //Removes completed lines from game
+    function removeLines(arr){
+        for(let i = 0; i < arr.length; i++){
+            arr[i].color = '';
+            arr[i].empty = true;
+            arr[i].permanent = false;
+            for(let j = 0; j < arr[i].classes.length; j++){
+                if(arr[i].classes[j] != 'tile' && arr[i].classes[j] != 'firstTileX'){
+                    arr[i].classes.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+    };
 
 
                                         /////Recursive Function with setTimeout/////
