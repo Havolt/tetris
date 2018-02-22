@@ -391,7 +391,24 @@ function createShapeDataCaller(obj){
         for(let i = 0; i < dropLevels.length; i++){
             console.log(dropLevels[i]);
             for(let j = tetrisObj.mapData.length-1; j >= 0; j--){
-                if(tetrisObj.mapData[j].y < dropLevels[i]){console.log(tetrisObj.mapData[j].num)}
+                if(tetrisObj.mapData[j].y < dropLevels[i]){
+                    
+                    console.log(dropLevels)
+                    tetrisObj.mapData[j+10].color = tetrisObj.mapData[j].color;
+                    tetrisObj.mapData[j+10].empty = tetrisObj.mapData[j].empty;
+                    tetrisObj.mapData[j+10].permanent = tetrisObj.mapData[j].permanent;
+                    //tetrisObj.mapData[j+10].classes = tetrisObj.mapData[j].classes;
+                    tetrisObj.mapData[j+10].classes = [];
+                    for(let k = 0; k < tetrisObj.mapData[j].classes.length; k++){
+                        tetrisObj.mapData[j+10].classes.push(tetrisObj.mapData[j].classes[k]);
+                    }
+
+                    
+                    
+                }
+            }
+            for(let k = i; k < dropLevels.length; k++){
+                dropLevels[k] = dropLevels[k] + 1;
             }
         }
         
