@@ -372,8 +372,36 @@ function createShapeDataCaller(obj){
                 }
             }
         }
-        console.log(tetrisObj.restedPieces);
+        dropBlocks(arr);
     };
+
+    //Drop Blocks Above taken Line down
+    function dropBlocks(rowArr){
+        let dropAmt = rowArr.length / 10;
+        let dropLevels = [];
+        let dropAbv;
+
+        //Cycle through rowArr and add levels of removed lines to it
+        for(let i = 0; i < rowArr.length; i++){
+            if(i % 10 == 0){dropLevels.push(rowArr[i].y)};
+        }
+        dropLevels = dropLevels.reverse();
+
+        
+        for(let i = 0; i < dropLevels.length; i++){
+            console.log(dropLevels[i]);
+            for(let j = tetrisObj.mapData.length-1; j >= 0; j--){
+                if(tetrisObj.mapData[j].y < dropLevels[i]){console.log(tetrisObj.mapData[j].num)}
+            }
+        }
+        
+        
+    }
+
+    //Enacts gravity on floating blocks after removeLines is complete
+    function gravity(restArr, mapArr){
+        
+    }
 
 
                                         /////Recursive Function with setTimeout/////
