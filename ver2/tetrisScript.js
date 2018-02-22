@@ -356,6 +356,23 @@ function createShapeDataCaller(obj){
                 }
             }
         }
+        for(let i = 0; i < arr.length; i++){
+            for(let j = 0; j < tetrisObj.restedPieces.length; j++){
+                for(let k = 0; k < tetrisObj.restedPieces[j].length; k++){
+                    if(arr[i].num == tetrisObj.restedPieces[j][k]){
+                        tetrisObj.restedPieces[j].splice(k, 1);
+                        k--;
+                    }
+                }
+            }
+            for(let i = 0; i < tetrisObj.restedPieces.length; i++){
+                if(tetrisObj.restedPieces[i].length < 1){
+                    tetrisObj.restedPieces.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        console.log(tetrisObj.restedPieces);
     };
 
 
