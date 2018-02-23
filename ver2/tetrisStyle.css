@@ -50,15 +50,37 @@ body{
     background: red;
 }
 
-.scoreboard{
-    display: inline-block;
+.stats{
     font-family: arial;
-    text-align: right;
-    padding-right: 5px;
-    border-radius: 10px;
     font-size: 2em;
     color: #726252;
     position: absolute;
     left: 60%;
-    top: 50px;
+}
+
+.optionButtons{
+    font-family: arial;
+    font-size: 1.8em;
+    width: 240px;
+    height: 50px;
+    text-align: center;
+    background: rgb(233, 223, 207);
+    color: #5c4b3a;
+    border: 1px solid #b69b80;
+    line-height: 44px;
+    position: absolute;
+    left: 57%;
+    top: 70px;
+}
+
+.optionButtons:hover{
+    cursor: pointer;
+}
+
+.scoreboard{
+    top: 200px;
+}
+
+.timer{
+    top: 250px;
 }

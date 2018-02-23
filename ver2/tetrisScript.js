@@ -464,7 +464,15 @@ function createShapeDataCaller(obj){
                                         /////Scoreboard Section/////
 
     function drawScoreBoard(){
-        creElT('div', 'scoreboard', document.getElementsByClassName('tetrisContain')[0], 'Score : 0');
+        creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Score : 0');
+    }
+
+    function drawTimer(){
+        creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time: 0');
+    }
+    
+    function drawNewGameButton(){
+        creElT('div', ['newGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'New Game');
     }
 
     function updateScoreBoard(sb){
@@ -493,7 +501,13 @@ function createShapeDataCaller(obj){
         setTimeout(function(){gameEngine(time)}, time);
     }
 
-
+    //When new game button is pressed this function is called
+    function initGame(){
+        randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
+        playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
+        gameEngine(tetrisObj.timer);
+        console.log(tetrisObj);
+    }
 
 
     
@@ -506,11 +520,10 @@ function createShapeDataCaller(obj){
     creElT('div', 'tetrisBoard', document.getElementsByClassName('tetrisContain')[0]);
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
+    drawMap(tetrisObj.mapData);
     drawScoreBoard();
-    randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
-    playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
-    gameEngine(tetrisObj.timer);
-    console.log(tetrisObj);
+    drawTimer();
+    drawNewGameButton()
 })()
 
 
