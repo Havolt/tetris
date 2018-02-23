@@ -464,11 +464,11 @@ function createShapeDataCaller(obj){
                                         /////Scoreboard Section/////
 
     function drawScoreBoard(){
-        creElT('div', 'scoreboard', document.getElementById('app'), '0');
+        creElT('div', 'scoreboard', document.getElementsByClassName('tetrisContain')[0], 'Score : 0');
     }
 
     function updateScoreBoard(sb){
-        sb.innerHTML = score;
+        sb.innerHTML = 'Score: ' + score;
     }
 
 
@@ -476,6 +476,7 @@ function createShapeDataCaller(obj){
                                         /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
+        
         if(tetrisObj.movePiece){
             userCommands(tetrisObj.movePiece, tetrisObj.playerPiece.trueMap);
             tetrisObj.movePiece = 0;
@@ -501,7 +502,8 @@ function createShapeDataCaller(obj){
 
 (function initApp(){
     creElT('div', 'app', document.body, '', 'app');
-    creElT('div', 'tetrisBoard', document.getElementById('app'));
+    creElT('div', 'tetrisContain', document.getElementById('app'))
+    creElT('div', 'tetrisBoard', document.getElementsByClassName('tetrisContain')[0]);
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
     drawScoreBoard();

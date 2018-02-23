@@ -1,7 +1,19 @@
-.tetrisBoard{
+body{
+    background: #F5EEE3;
+}
+
+.tetrisContain{
     margin: 0 auto;
+    max-width: 1000px;
+    position: relative;
+}
+
+.tetrisBoard{
     width: 380px;
     height: 684px;
+    display: inline-block;
+    margin-left: 10%;
+    margin-top: 20px;
 }
 
 .tile{
@@ -9,6 +21,7 @@
     height: 36px;
     border: 1px solid rgb(129, 129, 129);
     float: left;
+    background: white;
 }
 
 .firstTileX{
@@ -38,17 +51,14 @@
 }
 
 .scoreboard{
+    display: inline-block;
     font-family: arial;
     text-align: right;
     padding-right: 5px;
-    background: black;
-    width: 180px;
-    height: 45px;
     border-radius: 10px;
-    font-size: 2.5em;
-    color: white;
-    border-left: 1px solid #cdcdcd;
-    border-top: 1px solid #cdcdcd;
-    border-right: 1px solid #ececec;
-    border-bottom: 1px solid #ececec;
+    font-size: 2em;
+    color: #726252;
+    position: absolute;
+    left: 60%;
+    top: 50px;
 }
