@@ -15,6 +15,7 @@ function creElT(type, cls, apnd, inHL, id){
 let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0};
 let score = 0;
 let highScore = 0;
+let keepGoing = false;
 
                                         ////Data Creation Section/////
 
@@ -498,11 +499,15 @@ function createShapeDataCaller(obj){
         passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
         updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
-        setTimeout(function(){gameEngine(time)}, time);
+        if(keepGoing){
+            setTimeout(function(){gameEngine(time)}, time);
+        }
     }
 
     //When new game button is pressed this function is called
     function initGame(){
+        tetrisObj.playerPiece = {}; tetrisObj.nextPiece = {}; tetrisObj.moveDownRunner = 10; 
+        tetrisObj.restedPieces = []; tetrisObj.movePiece = 0;
         randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
         gameEngine(tetrisObj.timer);
@@ -524,6 +529,10 @@ function createShapeDataCaller(obj){
     drawScoreBoard();
     drawTimer();
     drawNewGameButton()
+    document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
+        keepGoing = false;
+        setTimeout(function(){keepGoing = true; initGame()}, 100);
+    })
 })()
 
 
@@ -532,3 +541,4 @@ function createShapeDataCaller(obj){
 document.addEventListener('keydown', function(e){
     playerControl(e.keyCode)
 })
+
