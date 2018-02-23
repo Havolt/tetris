@@ -462,7 +462,7 @@ function createShapeDataCaller(obj){
     }
 
 
-                                        /////Scoreboard Section/////
+                                        /////Statistics Section/////
 
     function drawScoreBoard(){
         creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Score : 0');
@@ -476,8 +476,34 @@ function createShapeDataCaller(obj){
         creElT('div', ['newGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'New Game');
     }
 
+    function drawPreviewBlock(){
+        creElT('div', 'previewBlockTitle', document.getElementsByClassName('tetrisContain')[0], 'Next Piece:');
+        creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
+    }
+
     function updateScoreBoard(sb){
         sb.innerHTML = 'Score: ' + score;
+    }
+
+    function updatePreviewBlock(block, piece){
+        block.innerHTML = '';
+        for(let i = 0; i < piece.map.length; i++){
+
+            if(i == 0 || i % 4 == 0){
+                if(piece.map[i] == 0){
+                    creElT('div', ['tile', 'prevTile', 'firstTileX'], block);
+                }else if(piece.map[i] == 1){
+                    creElT('div', ['tile', 'prevTile', 'firstTileX', piece.color + 'Tile'], block);
+                }
+            }
+            else{
+                if(piece.map[i] == 0){
+                    creElT('div', ['prevTile', 'tile'], block);
+                }else if(piece.map[i] == 1){
+                    creElT('div', ['prevTile', 'tile', piece.color + 'Tile'], block);
+                }
+            }
+        }
     }
 
 
@@ -485,7 +511,6 @@ function createShapeDataCaller(obj){
                                         /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
-        
         if(tetrisObj.movePiece){
             userCommands(tetrisObj.movePiece, tetrisObj.playerPiece.trueMap);
             tetrisObj.movePiece = 0;
@@ -499,6 +524,7 @@ function createShapeDataCaller(obj){
         passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
         updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
+        updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece)
         if(keepGoing){
             setTimeout(function(){gameEngine(time)}, time);
         }
@@ -508,6 +534,7 @@ function createShapeDataCaller(obj){
     function initGame(){
         tetrisObj.playerPiece = {}; tetrisObj.nextPiece = {}; tetrisObj.moveDownRunner = 10; 
         tetrisObj.restedPieces = []; tetrisObj.movePiece = 0;
+        createMapData(tetrisObj);
         randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
         gameEngine(tetrisObj.timer);
@@ -526,9 +553,11 @@ function createShapeDataCaller(obj){
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
     drawMap(tetrisObj.mapData);
+    drawPreviewBlock;
     drawScoreBoard();
     drawTimer();
     drawNewGameButton()
+    drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
         setTimeout(function(){keepGoing = true; initGame()}, 100);

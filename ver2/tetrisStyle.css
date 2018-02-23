@@ -1,5 +1,6 @@
 body{
     background: #F5EEE3;
+    font-family:arial;
 }
 
 .tetrisContain{
@@ -50,8 +51,30 @@ body{
     background: red;
 }
 
+.prevTile{
+    width: 28px;
+    height: 28px;
+}
+
+.previewBlockTitle{
+    position: absolute;
+    color: #726252;
+    font-size: 1.4em;
+    left: 63.5%;
+    top: 34px;
+}
+
+.previewBlockContain{
+    background: rgb(247, 247, 247);
+    position: absolute;
+    left: 63%;
+    top: 70px;
+    border: 1px solid rgb(129, 129, 129);
+    width: 120px;
+    height: 120px;
+}
+
 .stats{
-    font-family: arial;
     font-size: 2em;
     color: #726252;
     position: absolute;
@@ -59,7 +82,6 @@ body{
 }
 
 .optionButtons{
-    font-family: arial;
     font-size: 1.8em;
     width: 240px;
     height: 50px;
@@ -67,20 +89,22 @@ body{
     background: rgb(233, 223, 207);
     color: #5c4b3a;
     border: 1px solid #b69b80;
-    line-height: 44px;
+    line-height: 48px;
     position: absolute;
     left: 57%;
-    top: 70px;
+    top: 250px;
+    user-select: none;
 }
 
 .optionButtons:hover{
+    background: rgb(206, 204, 201);
     cursor: pointer;
 }
 
 .scoreboard{
-    top: 200px;
+    top: 350px;
 }
 
 .timer{
-    top: 250px;
+    top: 400px;
 }
