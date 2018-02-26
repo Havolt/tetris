@@ -485,6 +485,10 @@ function createShapeDataCaller(obj){
         creElT('div', ['pauseGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Pause Game');
     }
 
+    function drawControlsButton(){
+        creElT('div', ['controlsButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Controls');
+    }
+
     function drawPreviewBlock(){
         creElT('div', 'previewBlockTitle', document.getElementsByClassName('tetrisContain')[0], 'Next Piece:');
         creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
@@ -526,6 +530,31 @@ function createShapeDataCaller(obj){
         }
     }
 
+    function createControlsSection(){
+        creElT('div', 'controlsContain', document.getElementById('app'));
+
+        creElT('div', 'rotateSection', document.getElementsByClassName('controlsContain')[0]);
+
+        function createControlButton(section, areaClass, iconClass, iconIH, textClass, textIH){
+            creElT('div', ['controlsArea', areaClass], document.getElementsByClassName(section)[0])
+            creElT('div', ['controlsIcon', iconClass], document.getElementsByClassName(areaClass)[0], iconIH);
+            creElT('div', ['controlsText', textClass], document.getElementsByClassName(areaClass)[0], textIH); 
+        }
+
+        createControlButton('rotateSection', 'zKeyContain', 'ciZKey', 'Z', 'ciZKeyText', 'Rotate Counter-Clockwise');
+        createControlButton('rotateSection', 'cKeyContain', 'ciCKey', 'C', 'ciCKeyText', 'Rotate Clockwise');
+
+
+
+        creElT('div', 'arrowsSection', document.getElementsByClassName('controlsContain')[0]);
+        creElT('div', ['controlsIcon', 'ciLeftArrow'], document.getElementsByClassName('arrowsSection')[0], '<i class="fa fa-arrow-left"></i>')
+    }
+
+    function displayControls(){
+        
+        console.log('snow');
+    }
+
 
 
                                         /////Recursive Function with setTimeout/////
@@ -564,8 +593,6 @@ function createShapeDataCaller(obj){
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
         pauseGame = false;
         gameEngine(tetrisObj.timer);
-        
-        console.log(pauseGame)
         console.log(tetrisObj);
     }
 
@@ -578,6 +605,7 @@ function createShapeDataCaller(obj){
     creElT('div', 'app', document.body, '', 'app');
     creElT('div', 'tetrisContain', document.getElementById('app'))
     creElT('div', 'tetrisBoard', document.getElementsByClassName('tetrisContain')[0]);
+    createControlsSection();
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
     drawMap(tetrisObj.mapData);
@@ -586,15 +614,15 @@ function createShapeDataCaller(obj){
     drawTimer();
     drawNewGameButton()
     drawPauseGameButton();
+    drawControlsButton();
     drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
         setTimeout(function(){keepGoing = true; initGame()}, 100);
     })
+    document.getElementsByClassName('controlsButton')[0].addEventListener('click', function(){displayControls()})
     document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
-        if(keepGoing && !pauseGame){
-            pauseGame = true;
-        }
+        if(keepGoing && !pauseGame){pauseGame = true;}
         else if(keepGoing && pauseGame){
             pauseGame = false;
             currTime = new Date();

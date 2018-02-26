@@ -103,15 +103,45 @@ body{
     top: 300px;
 }
 
+.controlsButton{
+    top: 350px;
+}
+
 .optionButtons:hover{
     background: rgb(206, 204, 201);
     cursor: pointer;
 }
 
 .scoreboard{
-    top: 400px;
+    top: 450px;
 }
 
 .timer{
-    top: 450px;
+    top: 500px;
+}
+
+.controlsArea{
+    width: 160px;
+}
+
+.controlsIcon{
+    background: rgb(243, 226, 208);
+    padding-top: 8px;
+    margin: 0 auto;
+    border: 1px solid #5C4B3A;
+    color: #5C4B3A;
+    display: block;;
+    font-size: 2.5em;
+    width: 55px;
+    height: 57px;
+    text-align: center;
+    border-radius: 2px;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.controlsText{
+    color: #5C4B3A;
+    text-align: center;
+    font-size: 1.2em;
 }
