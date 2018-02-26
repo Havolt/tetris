@@ -531,8 +531,10 @@ function createShapeDataCaller(obj){
     }
 
     function createControlsSection(){
-        creElT('div', 'controlsContain', document.getElementById('app'));
+        creElT('div', ['controlsContain', 'controlsContainHide'], document.getElementById('app'));
 
+        creElT('div', 'controlsTitle', document.getElementsByClassName('controlsContain')[0], 'CONTROLS');
+        creElT('div', 'crossSection', document.getElementsByClassName('controlsContain')[0], '<i class="fa fa-times"></i>');
         creElT('div', 'rotateSection', document.getElementsByClassName('controlsContain')[0]);
         creElT('div', 'arrowsSection', document.getElementsByClassName('controlsContain')[0]);
 
@@ -555,9 +557,8 @@ function createShapeDataCaller(obj){
         
     }
 
-    function displayControls(){
-        
-        console.log('snow');
+    function displayControls(div){
+        div.classList.remove('controlsContainHide');
     }
 
 
@@ -625,7 +626,8 @@ function createShapeDataCaller(obj){
         keepGoing = false;
         setTimeout(function(){keepGoing = true; initGame()}, 100);
     })
-    document.getElementsByClassName('controlsButton')[0].addEventListener('click', function(){displayControls()})
+    document.getElementsByClassName('controlsButton')[0].addEventListener('click', function(){displayControls(document.getElementsByClassName('controlsContain')[0])})
+    document.getElementsByClassName('crossSection')[0].addEventListener('click', function(){document.getElementsByClassName('controlsContain')[0].classList.add('controlsContainHide')})
     document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
         if(keepGoing && !pauseGame){pauseGame = true;}
         else if(keepGoing && pauseGame){
