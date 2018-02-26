@@ -92,8 +92,15 @@ body{
     line-height: 48px;
     position: absolute;
     left: 57%;
-    top: 250px;
+    
     user-select: none;
+}
+
+.newGameButton{
+    top: 250px;
+}
+.pauseGameButton{
+    top: 300px;
 }
 
 .optionButtons:hover{
@@ -102,9 +109,9 @@ body{
 }
 
 .scoreboard{
-    top: 350px;
+    top: 400px;
 }
 
 .timer{
-    top: 400px;
+    top: 450px;
 }

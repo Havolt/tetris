@@ -20,6 +20,7 @@ let currTime;
 let realTimeSeconds;
 let realTimeMinutes = 0;
 let keepGoing = false;
+let pauseGame = false;
 
                                         ////Data Creation Section/////
 
@@ -480,6 +481,10 @@ function createShapeDataCaller(obj){
         creElT('div', ['newGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'New Game');
     }
 
+    function drawPauseGameButton(){
+        creElT('div', ['pauseGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Pause Game');
+    }
+
     function drawPreviewBlock(){
         creElT('div', 'previewBlockTitle', document.getElementsByClassName('tetrisContain')[0], 'Next Piece:');
         creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
@@ -526,23 +531,25 @@ function createShapeDataCaller(obj){
                                         /////Recursive Function with setTimeout/////
 
     function gameEngine(time){
-        if(tetrisObj.movePiece){
-            userCommands(tetrisObj.movePiece, tetrisObj.playerPiece.trueMap);
-            tetrisObj.movePiece = 0;
-        }
-        if(tetrisObj.moveDownRunner == 0){
-            restCheck(tetrisObj.playerPiece, tetrisObj.moveDownRunner);
-        }
-        removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);
-        movePieceDown(tetrisObj.moveDownRunner);
-        realLocationData(tetrisObj.playerPiece, tetrisObj.mapData);
-        passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
-        drawMap(tetrisObj.mapData);
-        updateTimer(document.getElementsByClassName('timer')[0]);
-        updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
-        updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece)
-        if(keepGoing){
-            setTimeout(function(){gameEngine(time)}, time);
+        if(!pauseGame){
+            if(tetrisObj.movePiece){
+                userCommands(tetrisObj.movePiece, tetrisObj.playerPiece.trueMap);
+                tetrisObj.movePiece = 0;
+            }
+            if(tetrisObj.moveDownRunner == 0){
+                restCheck(tetrisObj.playerPiece, tetrisObj.moveDownRunner);
+            }
+            removeEmptyTiles(tetrisObj.playerPiece.trueMap, tetrisObj.mapData);
+            movePieceDown(tetrisObj.moveDownRunner);
+            realLocationData(tetrisObj.playerPiece, tetrisObj.mapData);
+            passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
+            drawMap(tetrisObj.mapData);
+            updateTimer(document.getElementsByClassName('timer')[0]);
+            updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
+            updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece)
+            if(keepGoing){
+                setTimeout(function(){gameEngine(time)}, time);
+            }
         }
     }
 
@@ -555,7 +562,10 @@ function createShapeDataCaller(obj){
         createMapData(tetrisObj);
         randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
+        pauseGame = false;
         gameEngine(tetrisObj.timer);
+        
+        console.log(pauseGame)
         console.log(tetrisObj);
     }
 
@@ -575,10 +585,23 @@ function createShapeDataCaller(obj){
     drawScoreBoard();
     drawTimer();
     drawNewGameButton()
+    drawPauseGameButton();
     drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
         setTimeout(function(){keepGoing = true; initGame()}, 100);
+    })
+    document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
+        if(keepGoing && !pauseGame){
+            pauseGame = true;
+        }
+        else if(keepGoing && pauseGame){
+            pauseGame = false;
+            currTime = new Date();
+            currTime = currTime.getTime();
+            startTime = currTime - (realTimeSeconds * 1000);
+            gameEngine(tetrisObj.timer);
+        }
     })
 })()
 
