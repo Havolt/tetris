@@ -15,6 +15,10 @@ function creElT(type, cls, apnd, inHL, id){
 let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0};
 let score = 0;
 let highScore = 0;
+let startTime;
+let currTime;
+let realTimeSeconds;
+let realTimeMinutes = 0;
 let keepGoing = false;
 
                                         ////Data Creation Section/////
@@ -469,7 +473,7 @@ function createShapeDataCaller(obj){
     }
 
     function drawTimer(){
-        creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time: 0');
+        creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time : 0:00');
     }
     
     function drawNewGameButton(){
@@ -482,7 +486,18 @@ function createShapeDataCaller(obj){
     }
 
     function updateScoreBoard(sb){
-        sb.innerHTML = 'Score: ' + score;
+        sb.innerHTML = 'Score : ' + score;
+    }
+
+    function updateTimer(timer){
+        currTime = new Date();
+        currTime = currTime.getTime();
+        realTimeSeconds = currTime - startTime;
+        realTimeSeconds = Math.floor(realTimeSeconds / 1000);
+        if(realTimeSeconds > 59){startTime = new Date(); realTimeMinutes++}
+        if(realTimeSeconds < 10 ){timer.innerHTML =  'Time : '+realTimeMinutes+':0' + realTimeSeconds}
+        if(realTimeSeconds < 60 && realTimeSeconds > 9 ){timer.innerHTML =  'Time : '+realTimeMinutes+':' + realTimeSeconds;}
+        
     }
 
     function updatePreviewBlock(block, piece){
@@ -523,6 +538,7 @@ function createShapeDataCaller(obj){
         realLocationData(tetrisObj.playerPiece, tetrisObj.mapData);
         passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
         drawMap(tetrisObj.mapData);
+        updateTimer(document.getElementsByClassName('timer')[0]);
         updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
         updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece)
         if(keepGoing){
@@ -533,7 +549,9 @@ function createShapeDataCaller(obj){
     //When new game button is pressed this function is called
     function initGame(){
         tetrisObj.playerPiece = {}; tetrisObj.nextPiece = {}; tetrisObj.moveDownRunner = 10; 
-        tetrisObj.restedPieces = []; tetrisObj.movePiece = 0;
+        tetrisObj.restedPieces = []; tetrisObj.movePiece = 0; score = 0;
+        startTime = new Date();
+        startTime = startTime.getTime();
         createMapData(tetrisObj);
         randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
