@@ -534,6 +534,7 @@ function createShapeDataCaller(obj){
         creElT('div', 'controlsContain', document.getElementById('app'));
 
         creElT('div', 'rotateSection', document.getElementsByClassName('controlsContain')[0]);
+        creElT('div', 'arrowsSection', document.getElementsByClassName('controlsContain')[0]);
 
         function createControlButton(section, areaClass, iconClass, iconIH, textClass, textIH){
             creElT('div', ['controlsArea', areaClass], document.getElementsByClassName(section)[0])
@@ -543,11 +544,15 @@ function createShapeDataCaller(obj){
 
         createControlButton('rotateSection', 'zKeyContain', 'ciZKey', 'Z', 'ciZKeyText', 'Rotate Counter-Clockwise');
         createControlButton('rotateSection', 'cKeyContain', 'ciCKey', 'C', 'ciCKeyText', 'Rotate Clockwise');
+        createControlButton('arrowsSection', 'leftKeyContain', 'ciLeftArrow', '<i class="fa fa-arrow-left"></i>', 'ciLeftKeyText', 'Move Left');
+        createControlButton('arrowsSection', 'downKeyContain', 'ciDownArrow', '<i class="fa fa-arrow-down"></i>', 'ciDownKeyText', 'Fast Drop');
+        createControlButton('arrowsSection', 'rightKeyContain', 'ciRightArrow', '<i class="fa fa-arrow-right"></i>', 'ciRightKeyText', 'Move Right');
 
 
 
-        creElT('div', 'arrowsSection', document.getElementsByClassName('controlsContain')[0]);
-        creElT('div', ['controlsIcon', 'ciLeftArrow'], document.getElementsByClassName('arrowsSection')[0], '<i class="fa fa-arrow-left"></i>')
+
+        
+        
     }
 
     function displayControls(){

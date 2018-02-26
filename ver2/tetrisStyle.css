@@ -120,8 +120,20 @@ body{
     top: 500px;
 }
 
+.controlsContain{
+    position: fixed;
+    background: rgba(53, 43, 43, 0.8);
+    width: 750px;
+    height: 250px;
+    left: 0;
+    right: 0;
+    top: 12%;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
 .controlsArea{
-    width: 160px;
+    width: 110px;
 }
 
 .controlsIcon{
@@ -140,8 +152,28 @@ body{
     font-weight: bold;
 }
 
+.controlsArea{
+    display: inline-block;
+}
+
 .controlsText{
-    color: #5C4B3A;
+    color: white;
     text-align: center;
     font-size: 1.2em;
+}
+
+.rotateSection{
+    position: absolute;
+    left: 25px;
+    bottom: 70px;
+}
+
+.arrowsSection{
+    position: absolute;
+    right: 25px;
+    bottom: 40px;
+}
+
+.cKeyContain{
+    position: absolute;
 }
