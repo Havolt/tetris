@@ -12,13 +12,14 @@ body{
 .tetrisBoard{
     width: 380px;
     height: 684px;
-    display: inline-block;
-    margin-left: 10%;
+    margin-left: 5%;
     margin-top: 20px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .tetrisBoardDark{
-    left: 10%;
+    left: 5%;
     font-family: monospace;
     margin-left: 0;
     position: absolute;
@@ -75,20 +76,26 @@ body{
     height: 28px;
 }
 
+.statsContain{
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
 .previewBlockTitle{
-    position: absolute;
+    margin-top: 30px;
+    position: relative;
     color: #726252;
     font-size: 1.4em;
-    left: 63.5%;
-    top: 34px;
+    text-align: center;
 }
 
 .previewBlockContain{
     background: rgb(247, 247, 247);
-    position: absolute;
-    left: 63%;
-    top: 70px;
+    position: relative;
     border: 1px solid rgb(129, 129, 129);
+    margin: 0 auto 45px auto;
     width: 120px;
     height: 120px;
 }
@@ -96,8 +103,8 @@ body{
 .stats{
     font-size: 2em;
     color: #726252;
-    position: absolute;
-    left: 60%;
+    position: relative;
+    margin-left: 20px;
 }
 
 .optionButtons{
@@ -109,46 +116,18 @@ body{
     color: #5c4b3a;
     border: 1px solid #b69b80;
     line-height: 48px;
-    position: absolute;
-    left: 57%;
+    position: relative;
     
     user-select: none;
 }
 
-.newGameButton{
-    top: 250px;
-}
-.pauseGameButton{
-    top: 300px;
-}
-
-.controlsButton{
-    top: 350px;
-}
-
 .difficultyButton{
-    top: 400px;
+    margin-bottom: 35px;
 }
 
 .optionButtons:hover{
     background: rgb(206, 204, 201);
     cursor: pointer;
-}
-
-.scoreboard{
-    top: 480px;
-}
-
-.highscore{
-    top: 520px;
-}
-
-.timer{
-    top: 560px;
-}
-
-.difficultyBoard{
-    top: 600px;
 }
 
 .controlsContain{
@@ -319,4 +298,16 @@ body{
 
 .dmbHard:hover{
     background: rgba(177, 74, 74, 0.562);
+}
+
+@media only screen and (max-width: 750px) {
+
+    .tetrisBoard{
+        margin-left: 0px;
+    }
+
+    .statsContain{
+        margin-left: 10px;
+    }
+
 }

@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 30, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0, runnerSpeed: 10};
+let tetrisObj = {timer : 35, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0, runnerSpeed: 10};
 let score = 0;
 let highScore = 0;
 let startTime;
@@ -28,7 +28,7 @@ let difficultyMenuOpen = false;
 //Creates Data in tetrisObj of map
 function createMapData(obj){
     let newArr = [];
-    for(let i = 0; i < 190; i++){
+    for(let i = 0; i < 200; i++){
         let arrObj = {};
         arrObj.num = i;
         arrObj.y = Math.floor(i/10);
@@ -92,7 +92,7 @@ function createShapeDataCaller(obj){
     //Draws map based on what is in the tetrisObj.mapData
     function drawMap(arr){
         document.getElementsByClassName('tetrisBoard')[0].innerHTML='';
-        for(let i = 10; i < arr.length; i++){
+        for(let i = 20; i < arr.length; i++){
             creElT('div', arr[i].classes, document.getElementsByClassName('tetrisBoard')[0]);
         }
     }
@@ -471,33 +471,33 @@ function createShapeDataCaller(obj){
                                         /////Statistics Section/////
 
     function drawScoreBoard(){
-        creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Score: 0');
-        creElT('div', ['scoreboard', 'stats', 'highscore'], document.getElementsByClassName('tetrisContain')[0], 'Highscore: '+highScore);
+        creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('statsContain')[0], 'Score: 0');
+        creElT('div', ['scoreboard', 'stats', 'highscore'], document.getElementsByClassName('statsContain')[0], 'Highscore: '+highScore);
     }
 
     function drawTimer(){
-        creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time: 0:00');
+        creElT('div', ['timer', 'stats'], document.getElementsByClassName('statsContain')[0], 'Time: 0:00');
     }
 
     function drawDifficultyBoard(){
-        creElT('div', ['difficultyBoard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty: ' + diffShow(tetrisObj.runnerSpeed));
+        creElT('div', ['difficultyBoard', 'stats'], document.getElementsByClassName('statsContain')[0], 'Difficulty: ' + diffShow(tetrisObj.runnerSpeed));
     }
     
     function drawNewGameButton(){
-        creElT('div', ['newGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'New Game');
+        creElT('div', ['newGameButton', 'optionButtons'], document.getElementsByClassName('statsContain')[0], 'New Game');
     }
 
     function drawPauseGameButton(){
-        creElT('div', ['pauseGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Pause Game');
+        creElT('div', ['pauseGameButton', 'optionButtons'], document.getElementsByClassName('statsContain')[0], 'Pause Game');
     }
 
     function drawControlsButton(){
-        creElT('div', ['controlsButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Controls');
+        creElT('div', ['controlsButton', 'optionButtons'], document.getElementsByClassName('statsContain')[0], 'Controls');
     }
 
 
     function drawDifficultyButton(){
-        creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty');
+        creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('statsContain')[0], 'Difficulty');
     }
 
     function drawDifficultyMenu(){
@@ -516,8 +516,8 @@ function createShapeDataCaller(obj){
     }
 
     function drawPreviewBlock(){
-        creElT('div', 'previewBlockTitle', document.getElementsByClassName('tetrisContain')[0], 'Next Piece:');
-        creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
+        creElT('div', 'previewBlockTitle', document.getElementsByClassName('statsContain')[0], 'Next Piece:');
+        creElT('div', 'previewBlockContain', document.getElementsByClassName('statsContain')[0]);
     }
 
     function updateScoreBoard(sb, hs){
@@ -612,6 +612,9 @@ function createShapeDataCaller(obj){
                 diff = 3;
                 break;
             }
+            if(keepGoing){
+                initGame();
+            }
         }
         document.getElementsByClassName('difficultyBoard')[0].innerHTML = 'Difficulty: ' + diffShow(tetrisObj.runnerSpeed);
         document.getElementsByClassName('difficultyMenu')[0].classList.add('hideDiv')
@@ -665,7 +668,7 @@ function createShapeDataCaller(obj){
                                             /////Game Over Section/////
 
     function gameOverCheck(map){
-        for(i = 10; i < 20; i++){
+        for(i = 20; i < 30; i++){
             if(map[i].permanent){
                 document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
                 document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'GAME OVER';
@@ -729,22 +732,26 @@ function createShapeDataCaller(obj){
     creElT('div', 'app', document.body, '', 'app');
     creElT('div', 'tetrisContain', document.getElementById('app'));
     creElT('div', 'tetrisBoard', document.getElementsByClassName('tetrisContain')[0]);
+    creElT('div', 'statsContain', document.getElementsByClassName('tetrisContain')[0]);
     creElT('div', ['tetrisBoard','tetrisBoardDark', 'tetrisBoardHide'], document.getElementsByClassName('tetrisContain')[0]);
     createControlsSection();
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
     drawMap(tetrisObj.mapData);
+    //drawPreviewBlock();
     drawPreviewBlock();
-    drawScoreBoard();
-    drawTimer();
-    drawDifficultyBoard();
     drawNewGameButton()
     drawPauseGameButton();
     drawControlsButton();
     drawDifficultyButton();
+    
+    drawScoreBoard();
+    drawTimer();
+    drawDifficultyBoard();
+    
     drawDifficultyWarning();
     drawDifficultyMenu();
-    drawPreviewBlock();
+    
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
         setTimeout(function(){keepGoing = true;  initGame()}, 100);
@@ -764,7 +771,6 @@ function createShapeDataCaller(obj){
     });
     console.log(document.getElementsByClassName('difficultyMenuButton').length)
     for(let i = 0; i < document.getElementsByClassName('difficultyMenuButton').length; i++){
-        console.log('beep')
         document.getElementsByClassName('difficultyMenuButton')[i].addEventListener('click', function(){changeDifficulty(document.getElementsByClassName('difficultyMenuButton')[i])})
     }
     document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
