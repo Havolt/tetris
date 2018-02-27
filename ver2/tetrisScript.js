@@ -494,6 +494,13 @@ function createShapeDataCaller(obj){
         creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty');
     }
 
+    function drawDifficultyWarning(){
+        creElT('div', ['difficultyWarning', 'hideDiv'], document.getElementById('app'));
+        creElT('div', 'difficultyWarningText', document.getElementsByClassName('difficultyWarning')[0], 'Changing difficulty will restart the game, proceed?');
+        creElT('div', ['difficultyWarningButton', 'dwbYes'], document.getElementsByClassName('difficultyWarning')[0], 'Yes');
+        creElT('div', ['difficultyWarningButton', 'dwbNo'], document.getElementsByClassName('difficultyWarning')[0], 'No');
+    }
+
     function drawPreviewBlock(){
         creElT('div', 'previewBlockTitle', document.getElementsByClassName('tetrisContain')[0], 'Next Piece:');
         creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
@@ -556,11 +563,6 @@ function createShapeDataCaller(obj){
         createControlButton('arrowsSection', 'leftKeyContain', 'ciLeftArrow', '<i class="fa fa-arrow-left"></i>', 'ciLeftKeyText', 'Move Left');
         createControlButton('arrowsSection', 'downKeyContain', 'ciDownArrow', '<i class="fa fa-arrow-down"></i>', 'ciDownKeyText', 'Fast Drop');
         createControlButton('arrowsSection', 'rightKeyContain', 'ciRightArrow', '<i class="fa fa-arrow-right"></i>', 'ciRightKeyText', 'Move Right');
-
-
-
-
-        
         
     }
 
@@ -568,21 +570,40 @@ function createShapeDataCaller(obj){
         div.classList.remove('controlsContainHide');
     }
 
+    function displayDifficultyMenu(){
+        console.log('here')
+    }
+
     function difficultySettings(){
         let allowDifficulty;
         if(!keepGoing){
-            allowDifficulty = true;
+            displayDifficultyMenu();
         }
         else{
-            pauseGame = true; 
-            document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
-            document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'PAUSED';
-            creElT('div', 'difficultyWarning', document.getElementById('app'));
-            creElT('div', 'difficultyWarningText', document.getElementsByClassName('difficultyWarning')[0], 'Changing difficulty will restart the game, proceed?');
-            creElT('div', ['difficultyWarningButton', 'dwbYes'], document.getElementsByClassName('difficultyWarning')[0], 'Yes');
-            creElT('div', ['difficultyWarningButton', 'dwbNo'], document.getElementsByClassName('difficultyWarning')[0], 'No');
+            haltGame();
+            document.getElementsByClassName('difficultyWarning')[0].classList.remove('hideDiv');
+            allowDifficulty = false;
         }
+        
     };
+
+                                                /////Pause the Game Section/////
+
+    function haltGame(){
+        pauseGame = true; 
+        document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
+        document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'PAUSED';
+    }
+
+    function unHaltGame(){
+        pauseGame = false;
+        currTime = new Date();
+        currTime = currTime.getTime();
+        startTime = currTime - (realTimeSeconds * 1000);
+        document.getElementsByClassName('tetrisBoardDark')[0].classList.add('tetrisBoardHide');
+        document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
+        gameEngine(tetrisObj.timer);
+    }
 
 
                                             /////Game Over Section/////
@@ -664,6 +685,7 @@ function createShapeDataCaller(obj){
     drawPauseGameButton();
     drawControlsButton();
     drawDifficultyButton();
+    drawDifficultyWarning();
     drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
@@ -671,22 +693,20 @@ function createShapeDataCaller(obj){
     })
     document.getElementsByClassName('controlsButton')[0].addEventListener('click', function(){displayControls(document.getElementsByClassName('controlsContain')[0])})
     document.getElementsByClassName('crossSection')[0].addEventListener('click', function(){document.getElementsByClassName('controlsContain')[0].classList.add('controlsContainHide')})
-    document.getElementsByClassName('difficultyButton')[0].addEventListener('click', function(){difficultySettings()})
-    document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
-        if(keepGoing && !pauseGame){
-            pauseGame = true; 
-            document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
-            document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'PAUSED';
-        }
-        else if(keepGoing && pauseGame){
-            pauseGame = false;
-            currTime = new Date();
-            currTime = currTime.getTime();
-            startTime = currTime - (realTimeSeconds * 1000);
+    document.getElementsByClassName('difficultyButton')[0].addEventListener('click', function(){difficultySettings()});
+    document.getElementsByClassName('dwbYes')[0].addEventListener('click', function(){
+        document.getElementsByClassName('difficultyWarning')[0].classList.add('hideDiv');
+        displayDifficultyMenu();
+    });
+    document.getElementsByClassName('dwbNo')[0].addEventListener('click', function(){
+            document.getElementsByClassName('difficultyWarning')[0].classList.add('hideDiv');
             document.getElementsByClassName('tetrisBoardDark')[0].classList.add('tetrisBoardHide');
             document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
-            gameEngine(tetrisObj.timer);
-        }
+            unHaltGame();
+    });
+    document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
+        if(keepGoing && !pauseGame){haltGame()}
+        else if(keepGoing && pauseGame){unHaltGame();}
     })
 })()
 
