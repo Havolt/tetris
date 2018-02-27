@@ -27,7 +27,7 @@ let pauseGame = false;
 //Creates Data in tetrisObj of map
 function createMapData(obj){
     let newArr = [];
-    for(let i = 0; i < 180; i++){
+    for(let i = 0; i < 190; i++){
         let arrObj = {};
         arrObj.num = i;
         arrObj.y = Math.floor(i/10);
@@ -91,7 +91,7 @@ function createShapeDataCaller(obj){
     //Draws map based on what is in the tetrisObj.mapData
     function drawMap(arr){
         document.getElementsByClassName('tetrisBoard')[0].innerHTML='';
-        for(let i = 0; i < arr.length; i++){
+        for(let i = 10; i < arr.length; i++){
             creElT('div', arr[i].classes, document.getElementsByClassName('tetrisBoard')[0]);
         }
     }
@@ -565,6 +565,17 @@ function createShapeDataCaller(obj){
     }
 
 
+                                            /////Game Over Section/////
+
+    function gameOverCheck(map){
+        for(i = 10; i < 20; i++){
+            if(map[i].permanent){
+                keepGoing = false;
+            };
+        }
+    }
+
+
 
                                         /////Recursive Function with setTimeout/////
 
@@ -584,7 +595,8 @@ function createShapeDataCaller(obj){
             drawMap(tetrisObj.mapData);
             updateTimer(document.getElementsByClassName('timer')[0]);
             updateScoreBoard(document.getElementsByClassName('scoreboard')[0], document.getElementsByClassName('highscore')[0] )
-            updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece)
+            updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece);
+            gameOverCheck(tetrisObj.mapData);
             if(keepGoing){
                 setTimeout(function(){gameEngine(time)}, time);
             }
@@ -593,10 +605,13 @@ function createShapeDataCaller(obj){
 
     //When new game button is pressed this function is called
     function initGame(){
+        document.getElementsByClassName('tetrisBoardDark')[0].classList.add('tetrisBoardHide');
+        document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
         tetrisObj.playerPiece = {}; tetrisObj.nextPiece = {}; tetrisObj.moveDownRunner = 10; 
         tetrisObj.restedPieces = []; tetrisObj.movePiece = 0; score = 0;
         startTime = new Date();
         startTime = startTime.getTime();
+        realTimeMinutes = 0;
         createMapData(tetrisObj);
         randomPieceSelect(tetrisObj.nextPiece, tetrisObj.pieceTypes);
         playerPieceSelect(tetrisObj.playerPiece, tetrisObj.nextPiece, tetrisObj.pieceTypes);
@@ -612,8 +627,9 @@ function createShapeDataCaller(obj){
 
 (function initApp(){
     creElT('div', 'app', document.body, '', 'app');
-    creElT('div', 'tetrisContain', document.getElementById('app'))
+    creElT('div', 'tetrisContain', document.getElementById('app'));
     creElT('div', 'tetrisBoard', document.getElementsByClassName('tetrisContain')[0]);
+    creElT('div', ['tetrisBoard','tetrisBoardDark', 'tetrisBoardHide'], document.getElementsByClassName('tetrisContain')[0]);
     createControlsSection();
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
@@ -627,17 +643,23 @@ function createShapeDataCaller(obj){
     drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
-        setTimeout(function(){keepGoing = true; initGame()}, 100);
+        setTimeout(function(){keepGoing = true;  initGame()}, 100);
     })
     document.getElementsByClassName('controlsButton')[0].addEventListener('click', function(){displayControls(document.getElementsByClassName('controlsContain')[0])})
     document.getElementsByClassName('crossSection')[0].addEventListener('click', function(){document.getElementsByClassName('controlsContain')[0].classList.add('controlsContainHide')})
     document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
-        if(keepGoing && !pauseGame){pauseGame = true;}
+        if(keepGoing && !pauseGame){
+            pauseGame = true; 
+            document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
+            document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'PAUSED';
+        }
         else if(keepGoing && pauseGame){
             pauseGame = false;
             currTime = new Date();
             currTime = currTime.getTime();
             startTime = currTime - (realTimeSeconds * 1000);
+            document.getElementsByClassName('tetrisBoardDark')[0].classList.add('tetrisBoardHide');
+            document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
             gameEngine(tetrisObj.timer);
         }
     })
