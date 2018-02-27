@@ -23,7 +23,7 @@ body{
     margin-left: 0;
     position: absolute;
     background: rgba(53, 43, 43, 0.6);
-    font-size: 3.4em;
+    font-size: 4.5em;
     font-weight: bold;
     color: white;
     text-shadow: 0 0 1px black;
@@ -126,21 +126,25 @@ body{
     top: 350px;
 }
 
+.difficultyButton{
+    top: 400px;
+}
+
 .optionButtons:hover{
     background: rgb(206, 204, 201);
     cursor: pointer;
 }
 
 .scoreboard{
-    top: 450px;
-}
-
-.highscore{
     top: 500px;
 }
 
-.timer{
+.highscore{
     top: 550px;
+}
+
+.timer{
+    top: 600px;
 }
 
 .controlsContain{
@@ -226,4 +230,41 @@ body{
 
 .cKeyContain{
     position: absolute;
+}
+
+.difficultyWarning{
+    width: 500px;
+    height: 190px;
+    background: rgba(53, 8, 8, 0.95);
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    position: fixed;
+    top: 22%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+}
+
+.difficultyWarningText{
+    text-align: center;
+    font-size: 1.4em;
+    margin: 20px auto 0 auto;
+    width: 80%;
+}
+
+.difficultyWarningButton{
+    width: 120px;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    margin: 10px 25px 0 25px;
+    font-size: 2.4em;
+    text-align: center;
+    display: inline-block;
+}
+
+.difficultyWarningButton:hover{
+    cursor: pointer;
+    background: rgba(80, 74, 177, 0.562);
 }

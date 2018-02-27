@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0};
+let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0, runnerSpeed: 10};
 let score = 0;
 let highScore = 0;
 let startTime;
@@ -265,9 +265,9 @@ function createShapeDataCaller(obj){
     }
 
     //Move truePos down a level after certain amount of time
-    function movePieceDown(runner){
+    function movePieceDown(runner, max){
         tetrisObj.moveDownRunner--;
-        if(runner == 0){ removeEmptyTiles(tetrisObj.playerPiece); tetrisObj.playerPiece.truePos += 10; tetrisObj.moveDownRunner = 10; };
+        if(runner == 0){ removeEmptyTiles(tetrisObj.playerPiece); tetrisObj.playerPiece.truePos += 10; tetrisObj.moveDownRunner = tetrisObj.runnerSpeed; };
     }
 
     //Erases previous blocks filled by tetris pieces
@@ -490,6 +490,10 @@ function createShapeDataCaller(obj){
         creElT('div', ['controlsButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Controls');
     }
 
+    function drawDifficultyButton(){
+        creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty');
+    }
+
     function drawPreviewBlock(){
         creElT('div', 'previewBlockTitle', document.getElementsByClassName('tetrisContain')[0], 'Next Piece:');
         creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
@@ -564,12 +568,30 @@ function createShapeDataCaller(obj){
         div.classList.remove('controlsContainHide');
     }
 
+    function difficultySettings(){
+        let allowDifficulty;
+        if(!keepGoing){
+            allowDifficulty = true;
+        }
+        else{
+            pauseGame = true; 
+            document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
+            document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'PAUSED';
+            creElT('div', 'difficultyWarning', document.getElementById('app'));
+            creElT('div', 'difficultyWarningText', document.getElementsByClassName('difficultyWarning')[0], 'Changing difficulty will restart the game, proceed?');
+            creElT('div', ['difficultyWarningButton', 'dwbYes'], document.getElementsByClassName('difficultyWarning')[0], 'Yes');
+            creElT('div', ['difficultyWarningButton', 'dwbNo'], document.getElementsByClassName('difficultyWarning')[0], 'No');
+        }
+    };
+
 
                                             /////Game Over Section/////
 
     function gameOverCheck(map){
         for(i = 10; i < 20; i++){
             if(map[i].permanent){
+                document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
+                document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'GAME OVER';
                 keepGoing = false;
             };
         }
@@ -581,6 +603,7 @@ function createShapeDataCaller(obj){
 
     function gameEngine(time){
         if(!pauseGame){
+            gameOverCheck(tetrisObj.mapData);
             if(tetrisObj.movePiece){
                 userCommands(tetrisObj.movePiece, tetrisObj.playerPiece.trueMap);
                 tetrisObj.movePiece = 0;
@@ -596,7 +619,7 @@ function createShapeDataCaller(obj){
             updateTimer(document.getElementsByClassName('timer')[0]);
             updateScoreBoard(document.getElementsByClassName('scoreboard')[0], document.getElementsByClassName('highscore')[0] )
             updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece);
-            gameOverCheck(tetrisObj.mapData);
+            
             if(keepGoing){
                 setTimeout(function(){gameEngine(time)}, time);
             }
@@ -607,7 +630,7 @@ function createShapeDataCaller(obj){
     function initGame(){
         document.getElementsByClassName('tetrisBoardDark')[0].classList.add('tetrisBoardHide');
         document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
-        tetrisObj.playerPiece = {}; tetrisObj.nextPiece = {}; tetrisObj.moveDownRunner = 10; 
+        tetrisObj.playerPiece = {}; tetrisObj.nextPiece = {}; tetrisObj.moveDownRunner = tetrisObj.runnerSpeed; 
         tetrisObj.restedPieces = []; tetrisObj.movePiece = 0; score = 0;
         startTime = new Date();
         startTime = startTime.getTime();
@@ -640,6 +663,7 @@ function createShapeDataCaller(obj){
     drawNewGameButton()
     drawPauseGameButton();
     drawControlsButton();
+    drawDifficultyButton();
     drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
@@ -647,6 +671,7 @@ function createShapeDataCaller(obj){
     })
     document.getElementsByClassName('controlsButton')[0].addEventListener('click', function(){displayControls(document.getElementsByClassName('controlsContain')[0])})
     document.getElementsByClassName('crossSection')[0].addEventListener('click', function(){document.getElementsByClassName('controlsContain')[0].classList.add('controlsContainHide')})
+    document.getElementsByClassName('difficultyButton')[0].addEventListener('click', function(){difficultySettings()})
     document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
         if(keepGoing && !pauseGame){
             pauseGame = true; 
