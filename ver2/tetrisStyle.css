@@ -136,14 +136,18 @@ body{
 }
 
 .scoreboard{
-    top: 500px;
+    top: 480px;
 }
 
 .highscore{
-    top: 550px;
+    top: 520px;
 }
 
 .timer{
+    top: 560px;
+}
+
+.difficultyBoard{
     top: 600px;
 }
 

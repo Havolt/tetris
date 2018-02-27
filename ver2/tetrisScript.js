@@ -12,7 +12,7 @@ function creElT(type, cls, apnd, inHL, id){
     apnd.appendChild(newEl);
 }
 
-let tetrisObj = {timer : 50, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0, runnerSpeed: 10};
+let tetrisObj = {timer : 30, playerPiece : {}, nextPiece: {}, moveDownRunner : 10, restedPieces: [], movePiece: 0, runnerSpeed: 10};
 let score = 0;
 let highScore = 0;
 let startTime;
@@ -478,6 +478,10 @@ function createShapeDataCaller(obj){
     function drawTimer(){
         creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time: 0:00');
     }
+
+    function drawDifficultyBoard(){
+        creElT('div', ['difficultyBoard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty: ' + diffShow(tetrisObj.runnerSpeed));
+    }
     
     function drawNewGameButton(){
         creElT('div', ['newGameButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'New Game');
@@ -490,6 +494,7 @@ function createShapeDataCaller(obj){
     function drawControlsButton(){
         creElT('div', ['controlsButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Controls');
     }
+
 
     function drawDifficultyButton(){
         creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty');
@@ -593,18 +598,24 @@ function createShapeDataCaller(obj){
         let diff = 2;
         for(let i = 0; i < div.classList.length; i++){
             if(div.classList[i] == 'dmbEasy'){
+                tetrisObj.runnerSpeed = 10;
                 diff = 1;
                 break;
             }
             else if(div.classList[i] == 'dmbMedium'){
+                tetrisObj.runnerSpeed = 6;
                 diff = 2;
                 break;
             }
             else if(div.classList[i] == 'dmbHard'){
+                tetrisObj.runnerSpeed = 3;
                 diff = 3;
                 break;
             }
         }
+        document.getElementsByClassName('difficultyBoard')[0].innerHTML = 'Difficulty: ' + diffShow(tetrisObj.runnerSpeed);
+        document.getElementsByClassName('difficultyMenu')[0].classList.add('hideDiv')
+        difficultyMenuOpen = false;
         console.log('diff == ' + diff)
     }
 
@@ -620,6 +631,17 @@ function createShapeDataCaller(obj){
         }
         
     };
+
+    function diffShow(speed){
+        if(speed == 10){
+            return 'Easy';
+        }
+        else if(speed == 6){
+            return 'Medium';
+        }else if(speed == 3){
+            return 'Hard';
+        }
+    }
 
                                                 /////Pause the Game Section/////
 
@@ -715,6 +737,7 @@ function createShapeDataCaller(obj){
     drawPreviewBlock();
     drawScoreBoard();
     drawTimer();
+    drawDifficultyBoard();
     drawNewGameButton()
     drawPauseGameButton();
     drawControlsButton();
