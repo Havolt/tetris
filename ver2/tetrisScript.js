@@ -470,11 +470,12 @@ function createShapeDataCaller(obj){
                                         /////Statistics Section/////
 
     function drawScoreBoard(){
-        creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Score : 0');
+        creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Score: 0');
+        creElT('div', ['scoreboard', 'stats', 'highscore'], document.getElementsByClassName('tetrisContain')[0], 'Highscore: '+highScore);
     }
 
     function drawTimer(){
-        creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time : 0:00');
+        creElT('div', ['timer', 'stats'], document.getElementsByClassName('tetrisContain')[0], 'Time: 0:00');
     }
     
     function drawNewGameButton(){
@@ -494,8 +495,10 @@ function createShapeDataCaller(obj){
         creElT('div', 'previewBlockContain', document.getElementsByClassName('tetrisContain')[0]);
     }
 
-    function updateScoreBoard(sb){
-        sb.innerHTML = 'Score : ' + score;
+    function updateScoreBoard(sb, hs){
+        sb.innerHTML = 'Score: ' + score;
+        if(highScore < score){highScore = score}
+        hs.innerHTML = 'Highscore: ' + highScore;
     }
 
     function updateTimer(timer){
@@ -504,8 +507,8 @@ function createShapeDataCaller(obj){
         realTimeSeconds = currTime - startTime;
         realTimeSeconds = Math.floor(realTimeSeconds / 1000);
         if(realTimeSeconds > 59){startTime = new Date(); realTimeMinutes++}
-        if(realTimeSeconds < 10 ){timer.innerHTML =  'Time : '+realTimeMinutes+':0' + realTimeSeconds}
-        if(realTimeSeconds < 60 && realTimeSeconds > 9 ){timer.innerHTML =  'Time : '+realTimeMinutes+':' + realTimeSeconds;}
+        if(realTimeSeconds < 10 ){timer.innerHTML =  'Time: '+realTimeMinutes+':0' + realTimeSeconds}
+        if(realTimeSeconds < 60 && realTimeSeconds > 9 ){timer.innerHTML =  'Time: '+realTimeMinutes+':' + realTimeSeconds;}
         
     }
 
@@ -580,7 +583,7 @@ function createShapeDataCaller(obj){
             passPosToMap(tetrisObj.playerPiece, tetrisObj.mapData);
             drawMap(tetrisObj.mapData);
             updateTimer(document.getElementsByClassName('timer')[0]);
-            updateScoreBoard(document.getElementsByClassName('scoreboard')[0])
+            updateScoreBoard(document.getElementsByClassName('scoreboard')[0], document.getElementsByClassName('highscore')[0] )
             updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece)
             if(keepGoing){
                 setTimeout(function(){gameEngine(time)}, time);

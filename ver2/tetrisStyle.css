@@ -116,8 +116,12 @@ body{
     top: 450px;
 }
 
-.timer{
+.highscore{
     top: 500px;
+}
+
+.timer{
+    top: 550px;
 }
 
 .controlsContain{
