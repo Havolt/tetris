@@ -208,7 +208,7 @@ body{
 .arrowsSection{
     position: absolute;
     right: 25px;
-    bottom: 54px;
+    bottom: 57px;
 }
 
 .cKeyContain{
@@ -308,6 +308,14 @@ body{
 
     .statsContain{
         margin-left: 10px;
+    }
+
+    .tetrisBoardDark{
+        left: 0px;
+    }
+
+    .controlsContain{
+        width: 600px;
     }
 
 }
