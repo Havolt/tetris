@@ -272,3 +272,47 @@ body{
 .hideDiv{
     display: none;
 }
+
+.difficultyMenu{
+    width: 500px;
+    height: 360px;
+    background: rgba(53, 8, 8, 0.95);
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    position: fixed;
+    top: 22%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+}
+
+.difficultyMenuText{
+    margin-top: 30px;
+    font-size: 2.8em;
+    margin-bottom: 42px;
+}
+
+.difficultyMenuButton{
+    width: 340px;
+    height: 56px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    margin: 15px auto 0 auto;
+    font-size: 2.4em;
+    text-align: center;
+    line-height:  52px;
+}
+
+.difficultyMenuButton:hover{
+    cursor: pointer;
+    background: rgba(80, 74, 177, 0.562);
+}
+
+.dmbEasy:hover{
+    background: rgba(77, 177, 74, 0.562);
+}
+
+.dmbHard:hover{
+    background: rgba(177, 74, 74, 0.562);
+}

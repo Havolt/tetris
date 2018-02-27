@@ -21,6 +21,7 @@ let realTimeSeconds;
 let realTimeMinutes = 0;
 let keepGoing = false;
 let pauseGame = false;
+let difficultyMenuOpen = false;
 
                                         ////Data Creation Section/////
 
@@ -494,6 +495,14 @@ function createShapeDataCaller(obj){
         creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('tetrisContain')[0], 'Difficulty');
     }
 
+    function drawDifficultyMenu(){
+        creElT('div', ['difficultyMenu', 'hideDiv'], document.getElementById('app'));
+        creElT('div', 'difficultyMenuText', document.getElementsByClassName('difficultyMenu')[0], 'Select difficulty level');
+        creElT('div', ['difficultyMenuButton', 'dmbEasy'], document.getElementsByClassName('difficultyMenu')[0], 'Easy');
+        creElT('div', ['difficultyMenuButton', 'dmbMedium'], document.getElementsByClassName('difficultyMenu')[0], 'Medium');
+        creElT('div', ['difficultyMenuButton', 'dmbHard'], document.getElementsByClassName('difficultyMenu')[0], 'Hard');
+    }
+
     function drawDifficultyWarning(){
         creElT('div', ['difficultyWarning', 'hideDiv'], document.getElementById('app'));
         creElT('div', 'difficultyWarningText', document.getElementsByClassName('difficultyWarning')[0], 'Changing difficulty will restart the game, proceed?');
@@ -571,7 +580,32 @@ function createShapeDataCaller(obj){
     }
 
     function displayDifficultyMenu(){
-        console.log('here')
+        if(!difficultyMenuOpen){
+            document.getElementsByClassName('difficultyMenu')[0].classList.remove('hideDiv');
+        }
+        else{
+            document.getElementsByClassName('difficultyMenu')[0].classList.add('hideDiv');
+        }
+        difficultyMenuOpen = !difficultyMenuOpen
+    }
+
+    function changeDifficulty(div){
+        let diff = 2;
+        for(let i = 0; i < div.classList.length; i++){
+            if(div.classList[i] == 'dmbEasy'){
+                diff = 1;
+                break;
+            }
+            else if(div.classList[i] == 'dmbMedium'){
+                diff = 2;
+                break;
+            }
+            else if(div.classList[i] == 'dmbHard'){
+                diff = 3;
+                break;
+            }
+        }
+        console.log('diff == ' + diff)
     }
 
     function difficultySettings(){
@@ -678,7 +712,7 @@ function createShapeDataCaller(obj){
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
     drawMap(tetrisObj.mapData);
-    drawPreviewBlock;
+    drawPreviewBlock();
     drawScoreBoard();
     drawTimer();
     drawNewGameButton()
@@ -686,6 +720,7 @@ function createShapeDataCaller(obj){
     drawControlsButton();
     drawDifficultyButton();
     drawDifficultyWarning();
+    drawDifficultyMenu();
     drawPreviewBlock();
     document.getElementsByClassName('newGameButton')[0].addEventListener('click', function(){
         keepGoing = false;
@@ -704,6 +739,11 @@ function createShapeDataCaller(obj){
             document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
             unHaltGame();
     });
+    console.log(document.getElementsByClassName('difficultyMenuButton').length)
+    for(let i = 0; i < document.getElementsByClassName('difficultyMenuButton').length; i++){
+        console.log('beep')
+        document.getElementsByClassName('difficultyMenuButton')[i].addEventListener('click', function(){changeDifficulty(document.getElementsByClassName('difficultyMenuButton')[i])})
+    }
     document.getElementsByClassName('pauseGameButton')[0].addEventListener('click', function(){
         if(keepGoing && !pauseGame){haltGame()}
         else if(keepGoing && pauseGame){unHaltGame();}
