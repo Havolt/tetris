@@ -328,7 +328,7 @@ body{
 
     .tetrisContain{
         margin: 0 auto;
-        width: auto;
+        width: fit-content;
     }
     .statsContain{
         margin-left: 0px;
@@ -343,9 +343,10 @@ body{
     }
 
     .previewBlockContain{
-        margin-bottom: 50px;
+        margin-bottom: 44px;
         margin-left: 0;
         border: 4px solid rgba(37, 37, 37, 0.795);
+        
     }
 
     .stats{
@@ -356,9 +357,16 @@ body{
     }
     
     .optionButtons{
-        width: 120px;
+        width: 128px;
         height: 46px;
         font-size: 1.2em;
+        background: rgb(235, 235, 235);
+        border: 1px solid rgb(102, 102, 102);
+    }
+
+    .optionButtons:hover{
+        background: rgba(120, 159, 218, 0.795);
+        color: white;
     }
 }
 
@@ -400,5 +408,19 @@ body{
         font-size: 1.6em;
     }
 
-    
+}
+
+@media only screen and (max-height: 720px) and (max-width: 670px) {
+
+    .statsContain{
+        height: 558px;;
+    }
+
+    .optionButtons{
+        width: 144px;
+    }
+
+    .stats{
+        font-size: 1.2em;
+    }
 }
