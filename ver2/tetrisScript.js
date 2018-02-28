@@ -470,6 +470,8 @@ function createShapeDataCaller(obj){
 
                                         /////Statistics Section/////
 
+    //Draw Each Section functions                                
+
     function drawScoreBoard(){
         creElT('div', ['scoreboard', 'stats'], document.getElementsByClassName('statsContain')[0], 'Score: 0');
         creElT('div', ['scoreboard', 'stats', 'highscore'], document.getElementsByClassName('statsContain')[0], 'Highscore: '+highScore);
@@ -519,6 +521,9 @@ function createShapeDataCaller(obj){
         creElT('div', 'previewBlockTitle', document.getElementsByClassName('statsContain')[0], 'Next Piece:');
         creElT('div', 'previewBlockContain', document.getElementsByClassName('statsContain')[0]);
     }
+
+
+    //Adds functionality to statistics sections
 
     function updateScoreBoard(sb, hs){
         sb.innerHTML = 'Score: ' + score;
@@ -619,7 +624,6 @@ function createShapeDataCaller(obj){
         document.getElementsByClassName('difficultyBoard')[0].innerHTML = 'Difficulty: ' + diffShow(tetrisObj.runnerSpeed);
         document.getElementsByClassName('difficultyMenu')[0].classList.add('hideDiv')
         difficultyMenuOpen = false;
-        console.log('diff == ' + diff)
     }
 
     function difficultySettings(){
@@ -637,12 +641,12 @@ function createShapeDataCaller(obj){
 
     function diffShow(speed){
         if(speed == 10){
-            return 'Easy';
+            return '<i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
         }
         else if(speed == 6){
-            return 'Medium';
+            return '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i>';
         }else if(speed == 3){
-            return 'Hard';
+            return '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>';
         }
     }
 
@@ -699,7 +703,6 @@ function createShapeDataCaller(obj){
             updateTimer(document.getElementsByClassName('timer')[0]);
             updateScoreBoard(document.getElementsByClassName('scoreboard')[0], document.getElementsByClassName('highscore')[0] )
             updatePreviewBlock(document.getElementsByClassName('previewBlockContain')[0], tetrisObj.nextPiece);
-            
             if(keepGoing){
                 setTimeout(function(){gameEngine(time)}, time);
             }
@@ -738,17 +741,14 @@ function createShapeDataCaller(obj){
     createMapData(tetrisObj);
     createShapeDataCaller(tetrisObj);
     drawMap(tetrisObj.mapData);
-    //drawPreviewBlock();
     drawPreviewBlock();
     drawNewGameButton()
     drawPauseGameButton();
     drawControlsButton();
     drawDifficultyButton();
-    
     drawScoreBoard();
     drawTimer();
     drawDifficultyBoard();
-    
     drawDifficultyWarning();
     drawDifficultyMenu();
     
@@ -769,7 +769,6 @@ function createShapeDataCaller(obj){
             document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = '';
             unHaltGame();
     });
-    console.log(document.getElementsByClassName('difficultyMenuButton').length)
     for(let i = 0; i < document.getElementsByClassName('difficultyMenuButton').length; i++){
         document.getElementsByClassName('difficultyMenuButton')[i].addEventListener('click', function(){changeDifficulty(document.getElementsByClassName('difficultyMenuButton')[i])})
     }

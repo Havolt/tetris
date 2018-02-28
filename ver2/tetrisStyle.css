@@ -117,7 +117,6 @@ body{
     border: 1px solid #b69b80;
     line-height: 48px;
     position: relative;
-    
     user-select: none;
 }
 
@@ -310,6 +309,11 @@ body{
         margin-left: 10px;
     }
 
+    .stats{
+        font-size: 1.6em;
+        margin-left: 30px; 
+    }
+
     .tetrisBoardDark{
         left: 0px;
     }
@@ -318,6 +322,44 @@ body{
         width: 600px;
     }
 
+}
+
+@media only screen and (max-width: 670px) {
+
+    .tetrisContain{
+        margin: 0 auto;
+        width: auto;
+    }
+    .statsContain{
+        margin-left: 0px;
+        background: rgba(88, 88, 88, 0.658);
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        height: 684px;
+    }
+
+    .previewBlockTitle{
+        color: white;
+    }
+
+    .previewBlockContain{
+        margin-bottom: 50px;
+        margin-left: 0;
+        border: 4px solid rgba(37, 37, 37, 0.795);
+    }
+
+    .stats{
+        color: white;
+        margin-left: 2px;
+        font-size: 1.1em;
+        margin-bottom: 4px;
+    }
+    
+    .optionButtons{
+        width: 120px;
+        height: 46px;
+        font-size: 1.2em;
+    }
 }
 
 @media only screen and (max-height: 720px) {
@@ -338,6 +380,24 @@ body{
 
     .tetrisBoardDark{
         font-size: 4em;
+    }
+
+    .previewBlockTitle{
+        margin-top: 0px;
+    }
+
+    .previewBlockContain{
+        margin-bottom: 28px;
+    }
+
+    .optionButtons{
+        font-size: 1.5em;
+        width: 200px;
+        height: 45px
+    }
+
+    .stats{
+        font-size: 1.6em;
     }
 
     
