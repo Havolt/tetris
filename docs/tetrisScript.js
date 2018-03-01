@@ -22,6 +22,7 @@ let realTimeMinutes = 0;
 let keepGoing = false;
 let pauseGame = false;
 let difficultyMenuOpen = false;
+let soundOn = true;
 
                                         ////Data Creation Section/////
 
@@ -214,6 +215,7 @@ function createShapeDataCaller(obj){
             if(comm == 4 || comm == 5){tetrisObj.playerPiece.truePos += displacement}
             if(comm == 4 || comm == 5){tetrisObj.playerPiece.trueMap = rotatedArrTrue}
             if(comm == 4 || comm == 5){tetrisObj.playerPiece.direction = nextDirection}
+            if((comm == 4 || comm == 5) && soundOn){rotateSound()}
             //if(comm == 4 || comm == 5){console.log(tetrisObj.playerPiece)}
         }
     } 
@@ -649,6 +651,13 @@ function createShapeDataCaller(obj){
             return '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>';
         }
     }
+
+                                                /////Audio Section/////
+
+    function rotateSound(){
+        let rotateSE = new Audio('sounds/rotate.wav');
+        rotateSE.play();
+    } 
 
                                                 /////Pause the Game Section/////
 
