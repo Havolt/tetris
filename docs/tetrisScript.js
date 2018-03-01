@@ -389,6 +389,7 @@ function createShapeDataCaller(obj){
             }
         }
         dropBlocks(arr);
+        clearLineSound();
     };
 
     //Drop Blocks Above taken Line down
@@ -656,8 +657,21 @@ function createShapeDataCaller(obj){
 
     function rotateSound(){
         let rotateSE = new Audio('sounds/rotate.wav');
+        rotateSE.volume = 0.15;
         rotateSE.play();
-    } 
+    }
+    
+    function clearLineSound(){
+        let clearLineSE = new Audio('sounds/clearLine.wav');
+        clearLineSE.volume = 0.15;
+        clearLineSE.play();
+    }
+
+    function gameOverSound(){
+        let gameOverSE = new Audio('sounds/gameOver.flac');
+        gameOverSE.volume = 0.1;
+        gameOverSE.play();
+    }
 
                                                 /////Pause the Game Section/////
 
@@ -685,6 +699,7 @@ function createShapeDataCaller(obj){
             if(map[i].permanent){
                 document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
                 document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'GAME OVER';
+                gameOverSound();
                 keepGoing = false;
             };
         }
