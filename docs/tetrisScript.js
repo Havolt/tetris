@@ -22,7 +22,7 @@ let realTimeMinutes = 0;
 let keepGoing = false;
 let pauseGame = false;
 let difficultyMenuOpen = false;
-let soundOn = true;
+let soundOn = false;
 
                                         ////Data Creation Section/////
 
@@ -389,7 +389,9 @@ function createShapeDataCaller(obj){
             }
         }
         dropBlocks(arr);
-        clearLineSound();
+        if(soundOn){
+            clearLineSound();
+        }
     };
 
     //Drop Blocks Above taken Line down
@@ -503,6 +505,10 @@ function createShapeDataCaller(obj){
 
     function drawDifficultyButton(){
         creElT('div', ['difficultyButton', 'optionButtons'], document.getElementsByClassName('statsContain')[0], 'Difficulty');
+    }
+
+    function drawSoundButton(){
+        creElT('div', ['soundButton', 'optionButtons'], document.getElementsByClassName('statsContain')[0], 'Sound Off');
     }
 
     function drawDifficultyMenu(){
@@ -653,6 +659,16 @@ function createShapeDataCaller(obj){
         }
     }
 
+    function soundToggle(){
+        if(soundOn){
+            soundOn = false;
+            document.getElementsByClassName('soundButton')[0].innerHTML = 'Sound Off';
+        }else{
+            soundOn = true;
+            document.getElementsByClassName('soundButton')[0].innerHTML = 'Sound On';
+        }
+    }
+
                                                 /////Audio Section/////
 
     function rotateSound(){
@@ -673,15 +689,28 @@ function createShapeDataCaller(obj){
         gameOverSE.play();
     }
 
+    function pauseGameSound(){
+        let pauseGameSE = new Audio('sounds/pause.wav');
+        pauseGameSE.volume = 0.2;
+        pauseGameSE.play();
+    }
+
                                                 /////Pause the Game Section/////
 
     function haltGame(){
+        if(soundOn){
+            pauseGameSound();
+        }
         pauseGame = true; 
         document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
         document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'PAUSED';
+        
     }
 
     function unHaltGame(){
+        if(soundOn){
+            pauseGameSound();
+        }
         pauseGame = false;
         currTime = new Date();
         currTime = currTime.getTime();
@@ -699,7 +728,9 @@ function createShapeDataCaller(obj){
             if(map[i].permanent){
                 document.getElementsByClassName('tetrisBoardDark')[0].classList.remove('tetrisBoardHide');
                 document.getElementsByClassName('tetrisBoardDark')[0].innerHTML = 'GAME OVER';
-                gameOverSound();
+                if(soundOn){
+                    gameOverSound();
+                }
                 keepGoing = false;
             };
         }
@@ -770,6 +801,7 @@ function createShapeDataCaller(obj){
     drawPauseGameButton();
     drawControlsButton();
     drawDifficultyButton();
+    drawSoundButton();
     drawScoreBoard();
     drawTimer();
     drawDifficultyBoard();
@@ -800,6 +832,7 @@ function createShapeDataCaller(obj){
         if(keepGoing && !pauseGame){haltGame()}
         else if(keepGoing && pauseGame){unHaltGame();}
     })
+    document.getElementsByClassName('soundButton')[0].addEventListener('click', function(){soundToggle()})
 })()
 
 

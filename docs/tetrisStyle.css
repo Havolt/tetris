@@ -95,7 +95,7 @@ body{
     background: rgb(247, 247, 247);
     position: relative;
     border: 1px solid rgb(129, 129, 129);
-    margin: 0 auto 45px auto;
+    margin: 0 auto 40px auto;
     width: 120px;
     height: 120px;
 }
@@ -120,8 +120,8 @@ body{
     user-select: none;
 }
 
-.difficultyButton{
-    margin-bottom: 35px;
+.soundButton{
+    margin-bottom: 30px;
 }
 
 .optionButtons:hover{
